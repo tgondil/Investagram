@@ -15,8 +15,8 @@ module.exports = {
       },
       animation: {
         'intro-bounce' : 'bounce 2s 2',
-        'intro-slide' : 'slide_up 5s 1',
-        'intro-unhide' : 'unhide 6.5s 1',
+        'intro-slide' : 'slide_up 3s 1',
+        'intro-unhide' : 'unhide 4.5s 1',
         'text': 'text 5s ease infinite',
       },
       keyframes: {
