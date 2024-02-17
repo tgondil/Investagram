@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 export default function SignUp() {
   return (
@@ -13,7 +14,7 @@ export default function SignUp() {
           </h1>
         </div>
         <div id="signup-fields" className="flex flex-col gap-8 w-3/12 pt-8 text-tacao-300 text-xl animate-intro-unhide">
-          <div id="account-create" className="flex items-center flex-col font-poppins ">
+          <div id="account-create" className="flex text-3xl font-light items-center flex-col font-poppins ">
           <h1>
             Create your Account
           </h1>
@@ -27,10 +28,10 @@ export default function SignUp() {
               Email
             </label>
             <input
-              class="shadow appearance-none border  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
-              placeholder="Username"
+              placeholder="Email"
             />
           </div>
           <div>
@@ -41,7 +42,7 @@ export default function SignUp() {
               Username
             </label>
             <input
-              class="shadow appearance-none border w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
               placeholder="Username"
@@ -55,10 +56,10 @@ export default function SignUp() {
               Password
             </label>
             <input
-              class="shadow appearance-none border w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
-              placeholder="Username"
+              placeholder="Password"
             />
             <button class="mt-3 text-lg mt-8 font-semibold 
                 bg-tacao-300 w-full text-white rounded-lg
@@ -66,6 +67,9 @@ export default function SignUp() {
                Sign Up
               </button>
           </div>
+          <h1 className="text-xl font-poppins font-normal flex items-center justify-center">
+                Already have an account?  <Link className="pl-1.5 hover:animate-text hover:font-bold hover:bg-gradient-to-r hover:from-teal-500 hover:via-tacao-300 hover:to-teal-500 hover:bg-clip-text hover:text-transparent" href={"/login"}>Login.</Link>
+              </h1>
         </div>
       </main>
     </>

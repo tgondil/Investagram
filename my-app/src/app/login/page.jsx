@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Login() {
   return (
     <>
@@ -51,7 +53,7 @@ export default function Login() {
                 Login
               </button>
               <h1 className="text-xl font-poppins font-normal flex items-center justify-center pt-6">
-                Don't have an account? Sign up.
+                Don't have an account? <Link className="pl-1.5 hover:animate-text hover:font-bold hover:bg-gradient-to-r hover:from-teal-500 hover:via-tacao-300 hover:to-teal-500 hover:bg-clip-text hover:text-transparent" href={"/signup"}>Sign up.</Link>
               </h1>
             </div>
           </div>
