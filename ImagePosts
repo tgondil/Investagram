@@ -1,0 +1,72 @@
+// Imports
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+
+// Set up the storage engine for multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // NEED TO DEFINE THE UPLOAD PATH
+    const uploadPath = 'public/uploads';
+    // Need to make the directory if it doesn't already exist
+    fs.mkdirSync(uploadPath, { recursive: true });
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const fileName = `${Date.now()}-${file.originalname}`;
+    cb(null, fileName);
+  },
+});
+
+// Set up multer with the configured storage engine
+const upload = multer({
+  storage: storage,
+  // Limit for file size is currently 5 MB, we can modify this as needed
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    // Check file types, you can customize this based on your needs
+    const allowedFileTypes = /jpeg|jpg|png|gif/;
+    const extname = allowedFileTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedFileTypes.test(file.mimetype);
+
+    if (extname && mimetype) {
+      return cb(null, true);
+    } else {
+      cb('Error: Only images are allowed!');
+    }
+  },
+});
+
+// Your existing Post model and route for post creation
+// HAVE TO ADD THE PATH TO THE POST MODEL
+import Post from 'path-to-post-model';
+
+const handlePostCreation = async (req, res) => {
+  try {
+    // Extract other post data from req.body
+    const { title, content, userId } = req.body;
+
+    // Create a new post instance
+    const newPost = new Post({
+      title,
+      content,
+      author: userId,
+    });
+
+    // Check if a file was uploaded
+    if (req.file) {
+      newPost.image = req.file.filename; // Save the filename to the 'image' field
+    }
+
+    // Save the post to the database
+    await newPost.save();
+
+    res.status(201).json({ message: 'Post created successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+// Route for handling post creation with file upload
+export default upload.single('image')(handlePostCreation);
