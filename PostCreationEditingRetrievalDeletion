@@ -1,0 +1,111 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// MongoDB connection
+// ADD OUR DATABASE NAME WHEN WE GET ONE
+// ADD OUR DATABASE NAME WHEN WE GET ONE
+// ADD OUR DATABASE NAME WHEN WE GET ONE
+mongoose.connect('mongodb://localhost:27017/your-database-name', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// Define Post schema
+const postSchema = new mongoose.Schema({
+  title: String,
+  content: String,
+});
+
+const Post = mongoose.model('Post', postSchema);
+
+// Middleware
+app.use(bodyParser.json());
+
+// API Endpoints
+app.get('/api/posts', async (req, res) => {
+  try {
+    const posts = await Post.find();
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+// This is where the post is created, and it automatically creates a postID
+app.post('/api/posts', async (req, res) => {
+  const { title, content } = req.body;
+
+  try {
+    const newPost = new Post({ title, content });
+    await newPost.save();
+    res.status(201).json(newPost);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Get a single post by ID
+app.get('/api/posts/:postId', async (req, res) => {
+    const postId = req.params.postId;
+  
+    try {
+      const post = await Post.findById(postId);
+      if (!post) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+  
+      res.json(post);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  // Update a post by ID
+  app.put('/api/posts/:postId', async (req, res) => {
+    const postId = req.params.postId;
+    const { title, content } = req.body;
+  
+    try {
+      const updatedPost = await Post.findByIdAndUpdate(
+        postId,
+        { title, content },
+        { new: true } // Return the updated document
+      );
+  
+      if (!updatedPost) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+  
+      res.json(updatedPost);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  // Delete a post by ID
+  app.delete('/api/posts/:postId', async (req, res) => {
+    const postId = req.params.postId;
+  
+    try {
+      const deletedPost = await Post.findByIdAndDelete(postId);
+  
+      if (!deletedPost) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+  
+      res.json({ message: 'Post deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+// Start the server
+app.listen(PORT, () => {
+    // ADD THE SERVER WHEN WE HAVE ONE
+    // ADD THE SERVER WHEN WE HAVE ONE
+    // ADD THE SERVER WHEN WE HAVE ONE
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
