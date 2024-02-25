@@ -45,7 +45,7 @@ export default function Login() {
                 class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="username"
                 type="text"
-                placeholder="Username"
+                placeholder="Password"
               />
               <button class="mt-3 text-lg mt-8 font-semibold 
                 bg-tacao-300 w-full text-white rounded-lg
