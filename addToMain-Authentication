@@ -1,0 +1,50 @@
+// add to app.js or your main server file
+
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const passport = require('./auth'); // Adjust the path accordingly
+const { User } = require('./models'); // Assuming you have a User model
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Connect to MongoDB
+// ADD DATABASE NAME WHEN WE GET ONE
+mongoose.connect('mongodb://localhost:27017/your-database-name', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// Middleware
+app.use(bodyParser.json());
+app.use(passport.initialize());
+
+// API Endpoints
+app.post('/api/login', passport.authenticate('local', { session: false }), (req, res) => {
+  const token = jwt.sign({ id: req.user._id }, 'your-secret-key', {
+    expiresIn: '1h',
+  });
+  res.json({ token });
+});
+
+// Protected Endpoint Example
+app.get('/api/posts', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  // Only authorized users can access this endpoint
+  // Your code to retrieve and send posts goes here
+  res.json({ message: 'Protected endpoint works!' });
+});
+
+// Example route that requires authentication
+app.post('/api/create-post', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  // Only authorized users can create a post
+  // Your code to create a post goes here
+  res.json({ message: 'Post created successfully!' });
+});
+
+// ... Other routes and configurations
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
