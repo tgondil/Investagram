@@ -1,7 +1,7 @@
 import React from "react";
-import Sidebar from "./components/sidebar";
+import Sidebar from "../../components/sidebar";
 import { IoHomeOutline } from "react-icons/io5";
-import Feed from "./components/feed";
+import Feed from "../../components/feed";
 
 export default function page() {
   return (
