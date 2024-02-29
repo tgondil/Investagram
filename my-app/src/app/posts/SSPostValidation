@@ -1,0 +1,18 @@
+// Create a new post with server-side validation
+app.post('/api/posts', async (req, res) => {
+    const { title, content } = req.body;
+  
+    // Check if post has both a title and a populated content section
+    if (!title || !content) {
+      return res.status(400).json({ error: 'Title and content are required fields.' });
+    }
+  
+    // Place to add more validation requirements
+  
+    try {  
+      const newPost = await Post.create({ title, content });
+      res.json(newPost);
+    } catch (error) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });  

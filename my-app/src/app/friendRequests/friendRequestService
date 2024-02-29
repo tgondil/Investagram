@@ -1,0 +1,29 @@
+// friendRequestService.js
+
+const FriendRequest = require('./path/to/friendRequestModel'); // Update the path
+
+const friendRequestService = {
+  async sendFriendRequest(senderId, recipientId) {
+    // Insert a new friend request into the MongoDB collection
+    const friendRequest = new FriendRequest({ senderId, recipientId });
+    await friendRequest.save();
+  },
+
+  async acceptFriendRequest(requestId) {
+    // Update the status of the friend request to 'accepted' in MongoDB
+    await FriendRequest.findByIdAndUpdate(requestId, { $set: { status: 'accepted' } });
+  },
+
+  async rejectFriendRequest(requestId) {
+    // Update the status of the friend request to 'rejected' in MongoDB
+    await FriendRequest.findByIdAndUpdate(requestId, { $set: { status: 'rejected' } });
+  },
+
+  async getFriendRequests(userId) {
+    // Retrieve friend requests for a specific user from MongoDB
+    const friendRequests = await FriendRequest.find({ recipientId: userId, status: 'pending' });
+    return friendRequests;
+  },
+};
+
+module.exports = friendRequestService;

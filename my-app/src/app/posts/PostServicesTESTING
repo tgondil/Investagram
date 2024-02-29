@@ -1,0 +1,32 @@
+// testing post services
+
+const postService = require('./postService');
+
+describe('Post Service', () => {
+  test('should create a post', async () => {
+    const newPost = await postService.createPost('Test Post', 'This is a test post.');
+    expect(newPost).toHaveProperty('_id');
+    expect(newPost.title).toBe('Test Post');
+    expect(newPost.content).toBe('This is a test post.');
+  });
+
+  test('should retrieve a post by ID', async () => {
+    const createdPost = await postService.createPost('Test Post', 'This is a test post.');
+    const retrievedPost = await postService.getPostById(createdPost._id);
+    expect(retrievedPost).toEqual(createdPost);
+  });
+
+  test('should update a post by ID', async () => {
+    const createdPost = await postService.createPost('Test Post', 'This is a test post.');
+    const updatedPost = await postService.updatePost(createdPost._id, 'Updated Post', 'Updated content.');
+    expect(updatedPost.title).toBe('Updated Post');
+    expect(updatedPost.content).toBe('Updated content.');
+  });
+
+  test('should delete a post by ID', async () => {
+    const createdPost = await postService.createPost('Test Post', 'This is a test post.');
+    await postService.deletePost(createdPost._id);
+    const deletedPost = await postService.getPostById(createdPost._id);
+    expect(deletedPost).toBeNull();
+  });
+});
