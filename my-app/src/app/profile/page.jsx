@@ -50,7 +50,7 @@ export default function page() {
                     Tanay Gondil
                 </h1>
                 <h1 className="text-tacao-300 mt-2">
-                    Hi, my name is Tanay Gondil, and I'm a student at Purdue!
+                    @purduecs || Pune
                 </h1>
                 <div className="flex justify-center items-center">
                 <h1 className=" animate-text w-1/3 bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent my-10 mt-7 pb-3 text-xl font-semibold flex justify-center border-b-2 border-teal-500">

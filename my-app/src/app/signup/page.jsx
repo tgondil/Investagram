@@ -58,7 +58,7 @@ export default function SignUp() {
             <input
               class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
-              type="text"
+              type="password"
               placeholder="Password"
             />
             <button class="mt-3 text-lg mt-8 font-semibold 
