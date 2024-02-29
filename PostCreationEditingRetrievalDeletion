@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 // ADD OUR DATABASE NAME WHEN WE GET ONE
 // ADD OUR DATABASE NAME WHEN WE GET ONE
 // ADD OUR DATABASE NAME WHEN WE GET ONE
-mongoose.connect('mongodb://localhost:27017/your-database-name', {
+mongoose.connect('mongodb+srv://yang2166:<password>@mydb.9xtm0sn.mongodb.net/?retryWrites=true&w=majority&appName=mydb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
