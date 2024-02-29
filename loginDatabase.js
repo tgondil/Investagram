@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 //Replace with appropriate connection string later
-const uri = 'connection_string'; 
+const uri = 'mongodb://localhost:27017';
 
 // Database and collection name
 const dbName = 'userinfo';
