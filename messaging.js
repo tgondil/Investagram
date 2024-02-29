@@ -1,30 +1,9 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const router = express.Router(); // Create an instance of Express Router
+const Message = require('./models/Message');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Middleware
-app.use(bodyParser.json());
-
-// Connect to MongoDB
-mongoose.connect('mongodb+srv://<username>:<password>@mydb.9xtm0sn.mongodb.net/?retryWrites=true&w=majority&appName=mydb', { useNewUrlParser: true, useUnifiedTopology: true });
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-// Define message schema
-const messageSchema = new mongoose.Schema({
-  sender: String,
-  receiver: String,
-  content: String,
-  timestamp: { type: Date, default: Date.now }
-});
-
-const Message = mongoose.model('Message', messageSchema);
-
-// Routes
-app.post('/send-message', async (req, res) => {
+// Define the POST route for sending a message
+router.post('/send-message', async (req, res) => {
   try {
     const { sender, receiver, content } = req.body;
     const newMessage = new Message({ sender, receiver, content });
@@ -36,7 +15,8 @@ app.post('/send-message', async (req, res) => {
   }
 });
 
-app.get('/messages', async (req, res) => {
+// Define the GET route for retrieving messages
+router.get('/messages', async (req, res) => {
   try {
     const { sender, receiver } = req.query;
     let query = {};
@@ -54,7 +34,5 @@ app.get('/messages', async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Export the router containing messaging routes
+module.exports = router;
