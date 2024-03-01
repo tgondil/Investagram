@@ -5,6 +5,7 @@ import { IoMailOutline } from "react-icons/io5";
 import { IoBookmarksOutline } from "react-icons/io5";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoPersonOutline } from "react-icons/io5";
+import { HiOutlineUsers } from "react-icons/hi2";
 import Link from "next/link";
 
 
@@ -37,11 +38,17 @@ export default function Sidebar() {
       <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5  text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
       <IoMdNotificationsOutline className="mx-2.5"/> Notifications
       </h1>
-      <Link href={"./profile"}>
+      <Link href={"./friendRequests"}>
       <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5  text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
-      <IoPersonOutline className="mx-2.5"/> Me
+      <HiOutlineUsers className="mx-2.5 mt-0.5"/> Friends
       </h1>
       </Link>
+      <Link href={"./profile"}>
+      <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5  text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
+      <IoPersonOutline className="mx-2.5 "/> Me
+      </h1>
+      </Link>
+      
       
 
       </div>
