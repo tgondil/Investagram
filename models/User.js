@@ -15,7 +15,9 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  emailToChange: String, // New field to store the temporary email
+  verificationToken: String // New field to store the verification token
 });
 
 // Create the User model
