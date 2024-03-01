@@ -1,63 +1,71 @@
 const express = require('express');
 const router = express.Router();
-const { MongoClient, GridFSBucket, ObjectId } = require('mongodb');
+const multer = require('multer');
+const mongoose = require('mongoose');
+const ProfilePicture = require('../models/ProfilePicture');
 
 // MongoDB connection URI
 const mongoURI = 'mongodb+srv://yang2166:Creepa1688@mydb.9xtm0sn.mongodb.net/?retryWrites=true&w=majority&appName=mydb';
 
-// Create a new MongoClient
-const client = new MongoClient(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+// Create a Mongoose connection
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+const conn = mongoose.connection;
 
-// Connect to MongoDB
-client.connect(async (err) => {
-  if (err) {
-    console.error('Failed to connect to MongoDB:', err);
-    return;
+// Configure Multer storage engine for memory storage
+const storage = multer.memoryStorage();
+
+// Initialize Multer with storage engine
+const upload = multer({ storage });
+
+// Handle file upload
+router.post('/upload/:userId', upload.single('file'), async (req, res) => {
+  try {
+    // Access the uploaded file from the request
+    const file = req.file;
+    const userId = req.params.userId;
+
+    // Create a new profile picture document
+    const newProfilePicture = new ProfilePicture({
+      userId: userId,
+      image: {
+        data: file.buffer,
+        contentType: file.mimetype
+      }
+    });
+
+    // Save the profile picture document to the database
+    await newProfilePicture.save();
+
+    // Respond with success message
+    res.json({ message: 'Profile picture uploaded successfully' });
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    res.status(500).json({ error: 'Failed to upload profile picture' });
   }
+});
 
-  console.log('Connected to MongoDB');
+// Handle file retrieval
+router.get('/download/:userId', async (req, res) => {
+  try {
+    // Retrieve userId from request params
+    const userId = req.params.userId;
 
-  // Access the database and GridFS bucket
-  const db = client.db();
-  const bucket = new GridFSBucket(db);
+    // Find the profile picture document by userId
+    const profilePicture = await ProfilePicture.findOne({ userId });
 
-  // Handle file upload
-  router.post('/upload', async (req, res) => {
-    try {
-      // Access the uploaded file from the request body
-      const file = req.file;
-
-      // Create a readable stream from the file buffer
-      const readableStream = file.createReadStream();
-
-      // Upload the file to GridFS
-      const uploadStream = bucket.openUploadStream(file.originalname);
-      readableStream.pipe(uploadStream);
-
-      // Respond with success message
-      res.json({ message: 'File uploaded successfully' });
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      res.status(500).json({ error: 'Failed to upload file' });
+    if (!profilePicture) {
+      return res.status(404).json({ error: 'Profile picture not found' });
     }
-  });
 
-  // Handle file retrieval
-  router.get('/download/:fileId', (req, res) => {
-    try {
-      // Retrieve file ID from request params
-      const fileId = req.params.fileId;
+    // Set the appropriate content type
+    res.set('Content-Type', profilePicture.image.contentType);
 
-      // Open a readable stream to download the file
-      const downloadStream = bucket.openDownloadStream(ObjectId(fileId));
-
-      // Pipe the file data to the response
-      downloadStream.pipe(res);
-    } catch (error) {
-      console.error('Error retrieving file:', error);
-      res.status(404).json({ error: 'File not found' });
-    }
-  });
+    // Send the image data as response
+    res.send(profilePicture.image.data);
+  } catch (error) {
+    console.error('Error retrieving profile picture:', error);
+    res.status(500).json({ error: 'Failed to retrieve profile picture' });
+  }
 });
 
 module.exports = router;

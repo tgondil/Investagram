@@ -2,41 +2,40 @@ const request = require('supertest');
 const app = require('../app');
 const User = require('../models/User');
 const fs = require('fs');
+const assert = require('assert');
 
 describe('Profile Picture', () => {
-  let testUser;
+  let testUserId;
 
-  beforeAll(async () => {
+  before(async () => {
     // Create a dummy user for testing
-    testUser = await User.create({
+    const newUser = new User({
       username: 'testuser1',
-      email: 'testing@example.com',
+      email: 'testuser1@example.com',
       password: 'password123'
     });
+    const savedUser = await newUser.save();
+    testUserId = savedUser._id;
   });
 
-  afterAll(async () => {
+  after(async () => {
     // Clean up test data after tests
     await User.deleteMany({});
-    // Remove test image if uploaded
-    if (fs.existsSync('./uploads/profiles/testuser.png')) {
-      fs.unlinkSync('./uploads/profiles/testuser.png');
-    }
   });
 
   it('should upload and retrieve profile picture', async () => {
     // Upload profile picture
     const uploadRes = await request(app)
-      .post('/profile-picture')
-      .attach('file', './tests/picture.png'); // Adjust the path to your test image
+      .post(`/profile-picture/upload/${testUserId}`)
+      .attach('file', './tests/picture.png'); // Attach test image file
 
-    expect(uploadRes.status).toBe(200);
+    assert.strictEqual(uploadRes.status, 200);
 
     // Retrieve profile picture
-    const retrieveRes = await request(app).get(`/profile-picture/${testUser._id}`);
+    const retrieveRes = await request(app).get(`/profile-picture/download/${testUserId}`);
 
-    expect(retrieveRes.status).toBe(200);
-    expect(retrieveRes.headers['content-type']).toMatch(/image/); // Check if response is an image
+    assert.strictEqual(retrieveRes.status, 200);
+    assert.ok(retrieveRes.headers['content-type'].includes('image')); // Check if response is an image
 
     // Additional assertions can be added if needed
   });
