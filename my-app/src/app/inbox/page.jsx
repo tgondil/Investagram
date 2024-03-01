@@ -110,7 +110,7 @@ const [messages, setMessages] = useState([
                 {messages.map((msg, index) => (
                   <div
                     key={index}
-                    className="hover:bg-gray-700 border rounded-3xl mb-4 h-1/12 w-full hover:shadow-2xl hover:text-tacao-300 transition duration-300"
+                    className="hover:bg-gray-700 border text-teal-300 rounded-3xl mb-4 h-1/12 w-full hover:shadow-2xl hover:text-tacao-300 transition duration-300"
                   >
                     <div className="bg-gray-800 rounded-3xl w-full  p-6">
                       <div className="flex items-center justify-between w-full  mb-4 ">
@@ -121,7 +121,7 @@ const [messages, setMessages] = useState([
                             className="object-contain rounded-full"
                           />
                         </div>
-                        <h2 className="text-lg font-semibold text-tacao-300 font-poppins ">{msg.user}</h2>
+                        <h2 className="text-lg font-semibold  font-poppins ">{msg.user}</h2>
                         <div className="flex gap-4">
                           <button
                             className="bg-teal-500 text-white px-3 py-1 rounded-lg hover:bg-teal-600 transition duration-300"

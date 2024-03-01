@@ -51,12 +51,12 @@ export default function FriendRequestsPage() {
             id="info"
             className="flex flex-col justify-center  items-center h-full"
           >
-            <div className="mt-20  w-4/5 h-full flex flex-col justify-center items-center">
+            <div className="  w-4/5 h-full flex flex-col justify-center items-center">
               <h1 className="text-3xl font-semibold text-teal-500 my-6 animate-text bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent">
                 Friend Requests
               </h1>
-              <div className="h-full shadow-xl  w-full flex gap-10">
-              <div className="bg-grey-800 border shadow-2xl rounded-xl overflow-auto w-2/6 p-6 mb-4 ">
+              <div className="h-4/5 shadow-xl  w-full flex gap-10">
+              <div className="bg-grey-800 border shadow-2xl rounded-xl flex flex-col items-center overflow-auto w-2/6 p-6 mb-4 ">
           <h1 className="font-semibold mb-4 flex items-center justify-center font-poppins text-2xl animate-text bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent">My Friends</h1>
           {friends.map((friend) => (
             <div key={friend.id} className="text-tacao-300 font-xlflex items-center justify-center my-6 mb-2">
