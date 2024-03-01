@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const friendRequestController = require('../controllers/friendRequestController');
+const friendRequestController = require('./usernamefriendRequestController');
 
 // Endpoint to send a friend request
 router.post('/send-request/:recipientId', friendRequestController.sendFriendRequest);
