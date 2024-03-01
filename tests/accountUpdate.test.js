@@ -20,28 +20,53 @@ describe('Account Update', () => {
     await User.deleteMany({});
   });
 
-  it('should update user email', async () => {
-    const res = await request(app)
+  it('should send email verification and update email after verification', async () => {
+    // Call the /update endpoint to change the email
+    const changeEmailRes = await request(app)
       .post('/update')
       .send({
-        userId: testUserId, // Use the ID of the test user
-        email: 'newemail@example.com'
+        userId: testUserId,
+        email: 'gameacc859@gmail.com'
       });
 
     // Check if the response status is 200
-    if (res.status !== 200) {
-      throw new Error('Expected response status code to be 200');
+    if (changeEmailRes.status !== 200) {
+      throw new Error('Expected response status code to be 200, First!');
     }
 
     // Check if the response body contains the expected message
-    if (!res.body || res.body.message !== 'User information updated successfully') {
+    if (!changeEmailRes.body || changeEmailRes.body.message !== 'User information updated successfully') {
       throw new Error('Expected response body to contain message: "User information updated successfully"');
     }
 
-    // Verify that the email has been updated in the database
+    // Check if the email has been updated in the database with verification token
     const updatedUser = await User.findById(testUserId);
-    if (!updatedUser || updatedUser.email !== 'newemail@example.com') {
-      throw new Error('Expected user email to be updated to "newemail@example.com"');
+    if (!updatedUser || updatedUser.emailToChange !== 'gameacc859@gmail.com' || !updatedUser.verificationToken) {
+      throw new Error('Expected user email to be updated with verification token');
+    }
+
+    // Verify the updated email
+    const verifyEmailRes = await request(app)
+      .post('/verify')
+      .send({
+        userId: testUserId,
+        verificationToken: updatedUser.verificationToken
+      });
+
+    // Check if the response status is 200
+    if (verifyEmailRes.status !== 200) {
+      throw new Error('Expected response status code to be 200, Second!');
+    }
+
+    // Check if the response body contains the expected message
+    if (!verifyEmailRes.body || verifyEmailRes.body.message !== 'Email has been successfully changed') {
+      throw new Error('Expected response body to contain message: "Email has been successfully changed"');
+    }
+
+    // Verify that the email has been updated in the database after verification
+    const finalUpdatedUser = await User.findById(testUserId);
+    if (!finalUpdatedUser || finalUpdatedUser.email !== 'gameacc859@gmail.com' || finalUpdatedUser.verificationToken) {
+      throw new Error('Expected user email to be updated after verification');
     }
   });
 

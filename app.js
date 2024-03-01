@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://<user>:<pass>@mydb.9xtm0sn.mongodb.net/?retryWrites=true&w=majority&appName=mydb');
+mongoose.connect('mongodb+srv://user:pass@mydb.9xtm0sn.mongodb.net/?retryWrites=true&w=majority&appName=mydb');
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
