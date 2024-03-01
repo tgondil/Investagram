@@ -59,7 +59,7 @@ export default function FriendRequestsPage() {
               <div className="bg-grey-800 border shadow-2xl rounded-xl overflow-auto w-2/6 p-6 mb-4 ">
           <h1 className="font-semibold mb-4 flex items-center justify-center font-poppins text-2xl animate-text bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent">My Friends</h1>
           {friends.map((friend) => (
-            <div key={friend.id} className="text-tacao-300 font-xl flex items-center justify-center my-6 mb-2">
+            <div key={friend.id} className="text-tacao-300 font-xlflex items-center justify-center my-6 mb-2">
               {friend.name}
             </div>
           ))}
@@ -71,7 +71,7 @@ export default function FriendRequestsPage() {
                   {friendRequests.map((request) => (
                     <div
                       key={request.id}
-                      className="hover:bg-gray-700 border rounded-3xl mb-4 h-1/12 w-full hover:shadow-2xl hover:text-tacao-300 transition duration-300"
+                      className="hover:bg-gray-700 border rounded-3xl mb-4 h-1/12 w-full text-teal-300 hover:shadow-2xl hover:text-tacao-300 transition duration-300"
                     >
                       <div className="bg-gray-800 rounded-3xl w-full p-6 ">
                         <div className="flex items-center justify-between w-full mb-4 hover:text-tacao-300">
@@ -82,7 +82,7 @@ export default function FriendRequestsPage() {
                               className="object-contain rounded-full"
                             />
                           </div>
-                          <h2 className="text-lg font-semibold font-poppins">
+                          <h2 className="text-lg  font-semibold font-poppins">
                             {request.name}
                           </h2>
                           <div className="flex gap-4">
