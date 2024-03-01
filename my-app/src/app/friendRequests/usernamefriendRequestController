@@ -1,7 +1,7 @@
 // friendRequestController.js
 
 const friendRequestService = require('./friendRequestService'); // Update the path
-const userService = require('../userService'); // Update the path
+const userService = require('./userService'); // Update the path
 
 const friendRequestController = {
   async sendFriendRequest(req, res, next) {
