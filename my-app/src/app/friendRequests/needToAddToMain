@@ -2,7 +2,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const friendRequestRoutes = require('./routes/friendRequestRoutes'); // Update the path
+const friendRequestRoutes = require('./friendRequestRoutes'); // Update the path
 
 const app = express();
 
