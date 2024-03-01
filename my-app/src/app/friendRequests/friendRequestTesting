@@ -1,0 +1,103 @@
+const request = require('supertest');
+const app = require('./my-app/'); // Update the path
+const userService = require('./userService'); // Update the path
+const friendService = require('./friendRequestService'); // Update the path
+
+// Mocking user data for testing
+const mockUser1 = {
+  id: 1,
+  email: 'user1@example.com',
+  username: 'user1',
+};
+
+const mockUser2 = {
+  id: 2,
+  email: 'user2@example.com',
+  username: 'user2',
+};
+
+jest.mock('../services/userService', () => ({
+  getUserById: jest.fn((id) => {
+    if (id === mockUser1.id) {
+      return mockUser1;
+    } else if (id === mockUser2.id) {
+      return mockUser2;
+    }
+    return null;
+  }),
+}));
+
+jest.mock('../services/friendService', () => ({
+  sendFriendRequest: jest.fn(),
+  acceptFriendRequest: jest.fn(),
+  getFriendRequests: jest.fn(),
+  getFriends: jest.fn(),
+}));
+
+describe('Friend Requests Tests', () => {
+  describe('POST /api/send-friend-request', () => {
+    it('should send a friend request when given valid user IDs', async () => {
+      const response = await request(app)
+        .post('/api/send-friend-request')
+        .send({ senderId: mockUser1.id, receiverId: mockUser2.id });
+
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe('Friend request sent successfully');
+      expect(friendService.sendFriendRequest).toHaveBeenCalledWith(
+        mockUser1.id,
+        mockUser2.id
+      );
+    });
+
+    // Add more test cases as needed
+
+  });
+
+  describe('POST /api/accept-friend-request', () => {
+    it('should accept a friend request when given valid user IDs', async () => {
+      const response = await request(app)
+        .post('/api/accept-friend-request')
+        .send({ userId: mockUser2.id, requestId: mockUser1.id });
+
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe('Friend request accepted successfully');
+      expect(friendService.acceptFriendRequest).toHaveBeenCalledWith(
+        mockUser2.id,
+        mockUser1.id
+      );
+    });
+
+    // Add more test cases as needed
+
+  });
+
+  describe('GET /api/friend-requests/:userId', () => {
+    it('should get friend requests for a user when given a valid user ID', async () => {
+      friendService.getFriendRequests.mockReturnValueOnce([mockUser1]);
+
+      const response = await request(app)
+        .get(`/api/friend-requests/${mockUser2.id}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.friendRequests).toEqual([mockUser1]);
+    });
+
+    // Add more test cases as needed
+
+  });
+
+  describe('GET /api/friends/:userId', () => {
+    it('should get friends for a user when given a valid user ID', async () => {
+      friendService.getFriends.mockReturnValueOnce([mockUser2]);
+
+      const response = await request(app)
+        .get(`/api/friends/${mockUser1.id}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.friends).toEqual([mockUser2]);
+    });
+
+    // Add more test cases as needed
+
+  });
+});

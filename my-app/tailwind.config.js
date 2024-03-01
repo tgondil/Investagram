@@ -18,7 +18,7 @@ module.exports = {
         "intro-slide": "slide_up 3s 1",
         "intro-unhide": "unhide 4.5s 1",
         text: "text 5s ease infinite",
-        pop: "pop 0.6s 1"
+        pop: "pop 0.5s 1"
       },
       keyframes: {
         text: {
@@ -41,7 +41,7 @@ module.exports = {
         },
         pop: {
           "0%": { transform: "translateY(0%)" },
-          "50%": { transform: "translateY(-20%)" },
+          "50%": { transform: "translateY(-10%)" },
           "100%": { transform: "translateY(0%)" },
         }
       },

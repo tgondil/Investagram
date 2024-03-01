@@ -1,0 +1,11 @@
+// Connect to MongoDB
+// ADD DATABASE NAME WHEN WE GET ONE
+mongoose.connect('mongodb://localhost:27017/your-database-name', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  
+  // Import the Post model
+  // ADD THE PATH TO THE POST MODEL
+  const Post = require('./path-to-post-model');
+  
