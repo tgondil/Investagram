@@ -14,10 +14,10 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // Require and use messaging routes
-const messagingRoutes = require('./messaging');
+const messagingRoutes = require('./messaging/messaging');
 app.use(messagingRoutes);
 
-const accountUpdateRoutes = require('./accountUpdate');
+const accountUpdateRoutes = require('./accountUpdate/accountUpdate');
 app.use(accountUpdateRoutes);
 
 // Start the server
