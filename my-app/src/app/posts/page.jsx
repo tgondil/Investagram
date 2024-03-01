@@ -4,32 +4,46 @@ import Sidebar from "../../components/sidebar";
 import { LuPencil } from "react-icons/lu";
 
 export default function PostManagementPage() {
-  const [posts, setPosts] = useState([
-    // Initial posts data
-    { id: 1, title: "Post 1", content: "Content of Post 1" },
-    { id: 2, title: "Post 2", content: "Content of Post 2" },
-    { id: 3, title: "Post 3", content: "Content of Post 3" },
-  ]);
-
-  const [newPost, setNewPost] = useState({ title: "", content: "" });
-
-  const handleAddPost = () => {
-    // Logic to add a new post
-    const id = posts.length + 1;
-    setPosts([...posts, { id, ...newPost }]);
-    setNewPost({ title: "", content: "" }); // Clear input fields after adding
-  };
-
-  const handleEditPost = (id) => {
-    // Logic to edit a post
-    // In a real application, you may open a modal with the post details to edit
-    console.log("Edit post with ID:", id);
-  };
-
-  const handleDeletePost = (id) => {
-    // Logic to delete a post
-    setPosts(posts.filter((post) => post.id !== id));
-  };
+    const [posts, setPosts] = useState([
+      // Initial posts data
+      { id: 1, title: "What stocks should I buy", content: "I think I want to buy 1000 units of Tesla" },
+      { id: 2, title: "What's happening with the market", content: "I don't understand what is happening, can someone explain it?" },
+      { id: 3, title: "Positive vibes check in", content: "How is everyone feeling today :)" },
+    ]);
+  
+    const [newPost, setNewPost] = useState({ title: "", content: "" });
+    const [editingPost, setEditingPost] = useState(null); // State to track the post being edited
+  
+    const handleAddPost = () => {
+      // Logic to add a new post
+      const id = posts.length + 1;
+      setPosts([...posts, { id, ...newPost }]);
+      setNewPost({ title: "", content: "" }); // Clear input fields after adding
+    };
+  
+    const handleEditPost = (post) => {
+      // Set the post to be edited in the state
+      setEditingPost(post);
+      setNewPost({ title: post.title, content: post.content }); // Initialize input fields with existing post details
+    };
+  
+    const handleSaveEdit = () => {
+      // Logic to save the edited post
+      setPosts((prevPosts) =>
+        prevPosts.map((prevPost) =>
+          prevPost.id === editingPost.id ? { id: editingPost.id, ...newPost } : prevPost
+        )
+      );
+      setEditingPost(null); // Clear editing state
+      setNewPost({ title: "", content: "" }); // Clear input fields after editing
+    };
+  
+    const handleDeletePost = (id) => {
+      // Logic to delete a post
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+      setEditingPost(null); // Clear editing state
+      setNewPost({ title: "", content: "" }); // Clear input fields after deleting
+    };
 
   return (
     <main className="h-screen bg-shark-950 w-full overflow-hidden">
@@ -86,9 +100,9 @@ export default function PostManagementPage() {
                         <div className="flex gap-4">
                           <button
                             className="bg-teal-500 text-white px-3 py-1 rounded-lg hover:bg-teal-600 transition duration-300"
-                            onClick={() => handleEditPost(post.id)}
+                            onClick={() => handleEditPost(post)}
                           >
-                            <LuPencil />
+                            Edit
                           </button>
                           <button
                             className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition duration-300"
