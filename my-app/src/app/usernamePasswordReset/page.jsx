@@ -40,19 +40,27 @@ export default function ResetPage() {
               <h1 className="text-3xl font-semibold text-teal-500 my-6 animate-text bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent">
                 {resetType === "username" ? "Username" : "Password"} Reset
               </h1>
+              {/* Reset Type Toggle Button */}
+              <button
+                onClick={() => setResetType(resetType === "username" ? "password" : "username")}
+                className="bg-teal-500 text-white px-4 py-2 rounded-lg mb-4 hover:bg-teal-600 transition duration-300"
+              >
+                Toggle Reset Type
+              </button>
+
               <div className="h-4/5 shadow-xl  w-full flex flex-col items-center">
                 <div className="mb-4 w-full animate-intro-unhide">
                   <label
                     className="block text-tacao-300 text-sm font-light mb-2"
                     htmlFor="email"
                   >
-                    Enter Your Email
+                    Enter Your {resetType === "username" ? "Email" : "Username"}
                   </label>
                   <input
                     className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="email"
-                    type="email"
-                    placeholder="Your Email Address"
+                    type={resetType === "username" ? "email" : "text"}
+                    placeholder={`Your ${resetType === "username" ? "Email" : "Username"} Address`}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -63,7 +71,7 @@ export default function ResetPage() {
                 px-6 py-3 block shadow-xl hover:animate-text hover:font-bold hover:bg-gradient-to-r hover:from-teal-500 hover:via-tacao-300 hover:to-teal-500 hover:bg-clip-text hover:text-transparent"
                   onClick={handleReset}
                 >
-                  {resetType === "username" ? "Send Username Reset" : "Send Password Reset"}
+                  {`Send ${resetType === "username" ? "Username" : "Password"} Reset`}
                 </button>
                 {resetStatus && (
                   <p className={`${resetStatus === "success" ? "text-green-500" : "text-red-500"} mt-4`}>
