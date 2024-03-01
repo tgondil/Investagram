@@ -1,12 +1,12 @@
 // Make sure to be in the root directory to install the packages.
 // npm install express mongoose body-parser crypto mongodb nodemailer
 // npm install --save-dev mocha chai
-// Run in the tests directory: npx mocha profilePicture.test.js
+// Run in the tests directory: npx mocha accountUpdate.test.js
 // Control c to close server
 
 const request = require('supertest');
 const app = require('../app'); // Assuming your Express app is exported from app.js
-const User = require('../models/User');
+const User = require('../../../../models/User');
 
 describe('Account Update', () => {
   let testUserId;
