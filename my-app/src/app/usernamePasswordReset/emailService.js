@@ -1,27 +1,48 @@
-// emailService.js
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
-  // Configure your email sending service (e.g., SMTP, Gmail, etc.)
-  service: 'gmail',
-  auth: {
-    user: 'your-email@gmail.com',
-    pass: 'your-email-password',
-  },
-});
-
-async function sendEmail(to, subject, text) {
+// emailService.js (client-side)
+export async function sendUsernameResetEmail(to, username) {
   try {
-    await transporter.sendMail({
-      from: 'your-email@gmail.com',
-      to,
-      subject,
-      text,
+    // Call an API route on the server to send the username reset email
+    const response = await fetch(`/api/send-username-reset-email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to,
+        username,
+      }),
     });
-    console.log(`Email sent to ${to} with subject: ${subject}`);
+
+    if (response.ok) {
+      console.log(`Username reset email sent successfully to ${to}`);
+    } else {
+      console.error(`Error sending username reset email: ${response.statusText}`);
+    }
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('Error sending username reset email:', error);
   }
 }
 
-module.exports = { sendEmail };
+export async function sendPasswordResetEmail(to, temporaryPassword) {
+  try {
+    // Call an API route on the server to send the password reset email
+    const response = await fetch(`/api/send-password-reset-email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to,
+        temporaryPassword,
+      }),
+    });
+
+    if (response.ok) {
+      console.log(`Password reset email sent successfully to ${to}`);
+    } else {
+      console.error(`Error sending password reset email: ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+  }
+}
