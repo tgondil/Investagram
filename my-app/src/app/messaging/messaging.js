@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router(); // Create an instance of Express Router
-const Message = require('./models/Message');
+const Message = require('../../../../models/Message');
 
 // Define the POST route for sending a message
 router.post('/send-message', async (req, res) => {

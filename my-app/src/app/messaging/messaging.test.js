@@ -1,7 +1,7 @@
 // Make sure to be in the root directory to install the packages.
 // npm install express mongoose body-parser crypto mongodb
 // npm install --save-dev mocha chai
-// Run in the tests directory: npx mocha profilePicture.test.js
+// Run in the tests directory: npx mocha messaging.test.js
 // Control c to close server
 
 const app = require('../app');
@@ -9,7 +9,7 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const assert = require('assert'); // Import Node.js's assert module
 
-const Message = require('../models/Message');
+const Message = require('../../../../models/Message');
 
 describe('Messaging routes', () => {
 
