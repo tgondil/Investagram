@@ -1,33 +1,34 @@
-// PollsPage.jsx
-
 import React, { useState, useEffect } from "react";
 import PollCard from "./PollCard";
 import axios from "axios";
 
-export default function PollsPage() {
+const PollsPage = () => {
+  // Define state for polls
   const [polls, setPolls] = useState([]);
 
+  // Fetch polls data from backend using useEffect
   useEffect(() => {
-    fetchPolls();
-  }, []);
+    // Example API endpoint for fetching polls data
+    const apiUrl = "/api/polls";
 
-  const fetchPolls = async () => {
-    try {
-      const response = await axios.get("/api/polls");
-      setPolls(response.data);
-    } catch (error) {
-      console.error("Error fetching polls:", error);
-    }
-  };
+    axios.get(apiUrl)
+      .then(response => {
+        setPolls(response.data);
+      })
+      .catch(error => {
+        console.error("Error fetching polls data:", error);
+      });
+  }, []); // Empty dependency array ensures useEffect runs only once on component mount
 
   return (
-    <main>
-      <h1>Polls</h1>
-      <div className="polls-container">
-        {polls.map((poll) => (
-          <PollCard key={poll._id} poll={poll} />
-        ))}
-      </div>
-    </main>
+    <div className="polls-page">
+      <h1>Polls Page</h1>
+      {/* Render PollCard components for each poll */}
+      {polls.map(poll => (
+        <PollCard key={poll.id} poll={poll} />
+      ))}
+    </div>
   );
-}
+};
+
+export default PollsPage;
