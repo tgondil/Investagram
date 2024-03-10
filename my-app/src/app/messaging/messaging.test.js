@@ -16,7 +16,7 @@ describe('Messaging routes', () => {
   // After running all tests, disconnect from the MongoDB test database
   after(async () => {
     // Drop the Message collection
-    await Message.deleteMany({});
+    // await Message.deleteMany({});
     
     // Disconnect from the MongoDB test database
     await mongoose.disconnect();
@@ -25,9 +25,9 @@ describe('Messaging routes', () => {
   // Test case for sending a message
   it('should send a message', async () => {
     const messageData = {
-      sender: 'user1',
+      sender: 'user100',
       receiver: 'user2',
-      content: 'Test message',
+      content: 'Test message. Im having a great day.',
     };
 
     try {
