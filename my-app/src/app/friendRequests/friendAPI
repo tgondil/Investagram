@@ -1,0 +1,17 @@
+// /my-app/pages/api/friend-requests.js
+
+export default async function handler(req, res) {
+  if (req.method === 'POST') {
+    // Handle sending friend request logic
+    // Use the backend logic you implemented for handling friend requests
+
+    res.status(200).json({ message: 'Friend request sent successfully' });
+  } else if (req.method === 'GET') {
+    // Handle fetching incoming friend requests logic
+    // Use the backend logic you implemented for fetching incoming friend requests
+
+    res.status(200).json({ incomingRequests: /* your fetched data here */ });
+  } else {
+    res.status(405).json({ error: 'Method Not Allowed' });
+  }
+}
