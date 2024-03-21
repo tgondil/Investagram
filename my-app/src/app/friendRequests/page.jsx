@@ -1,34 +1,36 @@
-// /my-app/src/components/page.jsx
-
-import { useState, useEffect } from 'react';
-
-const { Router } = require('express');
-const router = Router();
-const { saveFriendRequest, getIncomingRequests, respondToFriendRequest } = require('./db');
+"use client";
+import React, { useState, useEffect } from 'react';
+import Sidebar from '../../components/sidebar';
+import Link from 'next/link';
 
 const FriendRequests = () => {
-  // Example state for managing friend requests
   const [incomingRequests, setIncomingRequests] = useState([]);
+  const [friendsList, setFriendsList] = useState([]);
+  const [newFriendName, setNewFriendName] = useState('');
 
   useEffect(() => {
-    // Fetch incoming friend requests from the backend
-    fetch('/app/friendRequests/friendAPI') // Update the API path
+    // Fetch incoming friend requests
+    fetch('/app/friendRequests/incoming', { method: 'GET' })
       .then(response => response.json())
       .then(data => setIncomingRequests(data.incomingRequests))
-      .catch(error => console.error('Error fetching friend requests:', error));
-  }, []); // Empty dependency array to fetch data once when the component mounts
+      .catch(error => console.error('Error fetching incoming friend requests:', error));
+    
+    // Fetch user's friends list
+    fetch('/app/friendRequests/friends', { method: 'GET' })
+      .then(response => response.json())
+      .then(data => setFriendsList(data.friends))
+      .catch(error => console.error('Error fetching friends list:', error));
+  }, []);
 
-  // Example function to send a friend request
   const sendFriendRequest = () => {
-    // You need to replace the URL with your actual backend API route
-    fetch('/app/friendRequests/friendAPI', {
+    // Send friend request to the typed friend name
+    fetch('/app/friendRequests/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        senderId: '123', // Replace '123' with the actual user ID
-        receiverId: '456', // Replace '456' with the recipient's user ID
+        friendName: newFriendName,
       }),
     })
       .then(response => response.json())
@@ -36,10 +38,9 @@ const FriendRequests = () => {
       .catch(error => console.error('Error sending friend request:', error));
   };
 
-  // Function to respond to a friend request
   const respondToFriendRequest = (requestId, response) => {
-    // You need to replace the URL with your actual backend API route
-    fetch('/app/friendRequests/friendAPI', {
+    // Respond to an incoming friend request
+    fetch('/app/friendRequests/respond', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -55,60 +56,71 @@ const FriendRequests = () => {
   };
 
   return (
-    <main className="flex min-h-screen flex-col bg-shark-950 items-center justify-center">
-      <div className="flex flex-col text-tacao-300 items-center justify-center gap-12">
-        {/* Existing header */}
-        <div className="text-8xl font-poppins font-semibold animate-intro-slide flex flex-col items-center justify-center">
-          <h1 className="h-[7rem] sm:h-[7rem] text-8xl font-poppins font-semibold animate-intro-slide animate-text bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent">
-            Investagram
-          </h1>
-          <h1 className="animate-intro-unhide text-xl animate-text bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent">
-            Investing just got smarter.
-          </h1>
+    <main className="flex min-h-screen bg-shark-950 text-white">
+      <Sidebar />
+      <div className="flex-1 flex flex-col items-center justify-start p-8">
+        <div className="flex items-center justify-between w-full mb-8">
+          <h1 className="text-4xl font-bold animate-rainbow">Friends</h1>
+          <div className="animate-rainbow">Investagram</div>
         </div>
 
-        {/* Friend Requests Section */}
-        <div className="w-10/12 delay-5000 animate-intro-unhide">
-          {/* Existing components */}
-          <div className="flex items-center justify-center">
-            <h1 className="text-3xl font-poppins font-light">
-              Welcome back!
-            </h1>
-          </div>
-
-          {/* Send Friend Request */}
-          <button
-            className="mt-3 text-lg mt-8 font-semibold bg-tacao-300 w-full text-white rounded-lg px-6 py-3 block shadow-xl hover:animate-text hover:font-bold hover:bg-gradient-to-r hover:from-teal-500 hover:via-tacao-300 hover:to-teal-500 hover:bg-clip-text hover:text-transparent"
-            onClick={sendFriendRequest}
-          >
-            Send Friend Request
-          </button>
-
-          {/* Display Incoming Friend Requests */}
-          <div className="mt-6">
-            <h2 className="text-xl font-poppins font-light mb-2">Incoming Requests</h2>
-            <ul>
+        <div className="flex flex-col md:flex-row w-full md:space-x-4">
+          <section className="md:w-1/3">
+            <h2 className="text-2xl font-semibold mb-4 animate-rainbow">Incoming Friend Requests</h2>
+            <ul className="w-full">
               {incomingRequests.map(request => (
-                <li key={request._id}>
-                  {/* Display sender's information or any relevant details */}
-                  {request.senderName} has sent you a friend request.{' '}
-                  <button
-                    className="text-tacao-300 hover:text-white"
-                    onClick={() => respondToFriendRequest(request._id, 'accepted')}
-                  >
-                    Accept
-                  </button>{' '}
-                  /{' '}
-                  <button
-                    className="text-tacao-300 hover:text-white"
-                    onClick={() => respondToFriendRequest(request._id, 'rejected')}
-                  >
-                    Reject
-                  </button>
+                <li key={request._id} className="bg-gray-800 p-4 rounded mb-2">
+                  <div>{request.senderName} has sent you a friend request.</div>
+                  <div className="space-x-4">
+                    <button
+                      className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:bg-green-600"
+                      onClick={() => respondToFriendRequest(request._id, 'accepted')}
+                    >
+                      Accept
+                    </button>
+                    <button
+                      className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:bg-red-600"
+                      onClick={() => respondToFriendRequest(request._id, 'rejected')}
+                    >
+                      Reject
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
-          </div>
+          </section>
+
+          <section className="md:w-1/3">
+            <h2 className="text-2xl font-semibold mb-4 animate-rainbow">Send Friend Request</h2>
+            <div className="flex flex-col items-center justify-center">
+              <input
+                type="text"
+                className="bg-gray-800 border border-gray-600 text-white px-4 py-2 rounded mb-4"
+                placeholder="Enter friend's name"
+                value={newFriendName}
+                onChange={(e) => setNewFriendName(e.target.value)}
+              />
+              <button
+                className="px-4 py-2 bg-tacao-300 text-white rounded hover:bg-tacao-400 focus:outline-none"
+                onClick={sendFriendRequest}
+              >
+                Send Request
+              </button>
+            </div>
+          </section>
+
+          <section className="md:w-1/3">
+            <h2 className="text-2xl font-semibold mb-4 animate-rainbow">Current Friends</h2>
+            <ul className="w-full">
+              {friendsList.map(friend => (
+                <li key={friend._id} className="bg-gray-800 p-4 rounded mb-2">
+                  <Link href={`/profile/${friend.id}`}>
+                    <a className="text-blue-500 hover:underline">{friend.name}</a>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
       </div>
     </main>
