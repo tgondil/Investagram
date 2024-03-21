@@ -1,6 +1,10 @@
-// /my-app/src/app/friendRequests/page.jsx
+// /my-app/src/components/page.jsx
 
 import { useState, useEffect } from 'react';
+
+const { Router } = require('express');
+const router = Router();
+const { saveFriendRequest, getIncomingRequests, respondToFriendRequest } = require('./db');
 
 const FriendRequests = () => {
   // Example state for managing friend requests
