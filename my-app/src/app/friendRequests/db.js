@@ -10,7 +10,7 @@ async function saveFriendRequest(senderId, receiverId) {
     await client.connect();
     const database = client.db("mydb");
     const collection = database.collection("friendRequests");
-    await collection.insertOne({ senderId, receiverId });
+    await collection.insertOne({ senderId, receiverId, status: 'pending' }); // Add status field with default value
   } finally {
     await client.close();
   }
