@@ -9,7 +9,7 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const assert = require('assert'); // Import Node.js's assert module
 
-const Message = require('../../../../models/Message');
+const Message = require('../models/Message');
 
 describe('Messaging routes', () => {
 
