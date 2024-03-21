@@ -6,7 +6,7 @@
 
 const request = require('supertest');
 const app = require('../app'); // Assuming your Express app is exported from app.js
-const User = require('../../../../models/User');
+const User = require('../models/User');
 
 describe('Account Update', () => {
   let testUserId;
@@ -14,9 +14,9 @@ describe('Account Update', () => {
   before(async () => {
     // Set up test user in the database
     const testUser = await User.create({
-      username: 'testuser',
-      email: 'test@example.com',
-      password: 'password123'
+      username: 'user2',
+      email: 'user2@example.com',
+      password: 'qwerty1234'
     });
     testUserId = testUser._id; // Save the ID of the created user for use in tests
   });
