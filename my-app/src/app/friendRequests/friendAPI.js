@@ -1,66 +1,79 @@
 // /my-app/src/app/friendRequests/friendAPI.js
 
-const http = require('http');
-const { saveFriendRequest, getIncomingRequests, respondToFriendRequest } = require('./db');
+// Import necessary modules
+const express = require('express');
+const mongoose = require('mongoose');
 
-const server = http.createServer((req, res) => {
-  if (req.url === '/app/friendRequests/send' && req.method === 'POST') { // Updated endpoint
-    let body = '';
-    req.on('data', (chunk) => {
-      body += chunk.toString();
-    });
-    req.on('end', async () => {
-      const { senderId, receiverId } = JSON.parse(body);
-      try {
-        await saveFriendRequest(senderId, receiverId);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Friend request sent successfully' }));
-      } catch (error) {
-        console.error('Error sending friend request:', error);
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'An error occurred while sending the friend request' }));
-      }
-    });
-  } else if (req.url === '/app/friendRequests/incoming' && req.method === 'GET') { // Updated endpoint
-    let body = '';
-    req.on('data', (chunk) => {
-      body += chunk.toString();
-    });
-    req.on('end', async () => {
-      const { userId } = JSON.parse(body); // Assuming userId is sent in the request body
-      try {
-        const incomingRequests = await getIncomingRequests(userId);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ incomingRequests }));
-      } catch (error) {
-        console.error('Error retrieving incoming friend requests:', error);
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'An error occurred while retrieving incoming friend requests' }));
-      }
-    });
-  } else if (req.url === '/app/friendRequests/respond' && req.method === 'POST') { // Updated endpoint
-    let body = '';
-    req.on('data', (chunk) => {
-      body += chunk.toString();
-    });
-    req.on('end', async () => {
-      const { requestId, response } = JSON.parse(body);
-      try {
-        await respondToFriendRequest(requestId, response);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Friend request responded successfully' }));
-      } catch (error) {
-        console.error('Error responding to friend request:', error);
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'An error occurred while responding to the friend request' }));
-      }
-    });
-  } else {
-    res.writeHead(404, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Not found' }));
+// Create an Express application
+const app = express();
+
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// MongoDB setup
+const uri = "mongodb+srv://yang2166:Creepa1688@mydb.9xtm0sn.mongodb.net/?retryWrites=true&w=majority&appName=mydb";
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// Define MongoDB schema and model for FriendRequest
+const friendRequestSchema = new mongoose.Schema({
+  senderName: String,
+});
+
+const FriendRequest = mongoose.model('FriendRequest', friendRequestSchema);
+
+// Route to accept a friend request
+app.post('/api/friendRequests/accept', async (req, res) => {
+  try {
+    const { requestId } = req.body;
+    await FriendRequest.findByIdAndDelete(requestId);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error accepting friend request:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-server.listen(3000, () => {
-  console.log('Server is running on port 3000');
+// Route to reject a friend request
+app.post('/api/friendRequests/reject', async (req, res) => {
+  try {
+    const { requestId } = req.body;
+    await FriendRequest.findByIdAndDelete(requestId);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error rejecting friend request:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Route to send a friend request
+app.post('/api/friendRequests/send', async (req, res) => {
+  try {
+    const { friendName } = req.body;
+    const newRequest = new FriendRequest({ senderName: friendName });
+    await newRequest.save();
+    res.json({ success: true, requestId: newRequest._id });
+  } catch (error) {
+    console.error('Error sending friend request:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Route to fetch incoming friend requests
+app.get('/api/friendRequests/incoming', async (req, res) => {
+  try {
+    const incomingRequests = await FriendRequest.find();
+    res.json({ incomingRequests });
+  } catch (error) {
+    console.error('Error fetching incoming friend requests:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
