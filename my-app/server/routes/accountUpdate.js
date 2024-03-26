@@ -56,44 +56,79 @@ router.post('/verify', async (req, res) => {
   }
 });
 
-// Route to handle updating user information
-router.post('/update', async (req, res) => {
-  const { userId, email, username, password } = req.body;
+router.post('/update-username', async (req, res) => {
+  const { userId, newUsername } = req.body;
 
   try {
-    // Retrieve the user from the database
-    const user = await User.findById(userId);
+    if (await User.findOne({ username: newUsername })) {
+      return res.status(409).json({ error: 'Username is already taken' });
+    }
 
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Update user information
-    if (email) {
-      // Generate verification token
-      const verificationToken = crypto.randomBytes(5).toString('hex');
-      
-      // Send verification email
-      await sendVerificationEmail(email, verificationToken);
-
-      // Store the new email in a temporary field
-      user.emailToChange = email;
-      user.verificationToken = verificationToken;
-    }
-    if (username) {
-      user.username = username;
-    }
-    if (password) {
-      user.password = password; // Assign the plain text password directly
-    }
-
-    // Save the updated user information to the database
+    user.username = newUsername;
     await user.save();
-
-    res.json({ message: 'User information updated successfully' });
+    res.json({ message: 'Username updated successfully' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Failed to update user information' });
+    res.status(500).json({ error: 'Failed to update username' });
+  }
+});
+
+router.post('/verify-email', async (req, res) => {
+  const { userId, verificationToken } = req.body;
+
+  try {
+    const user = await User.findOne({ _id: userId, verificationToken: verificationToken });
+
+    if (!user) {
+      return res.status(404).json({ error: 'Invalid or expired verification token' });
+    }
+
+    // Ensure there's an email to change to
+    if (!user.emailToChange) {
+      return res.status(400).json({ error: 'No email change requested' });
+    }
+
+    // Update the user's email
+    user.email = user.emailToChange;
+    user.emailToChange = undefined;
+    user.verificationToken = undefined;
+
+    await user.save();
+    res.json({ message: 'Email updated successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to verify new email' });
+  }
+});
+
+router.post('/update-password', async (req, res) => {
+  const { userId, currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Here you should compare the currentPassword with the stored hash, 
+    // not just assign the new password. Use bcrypt to hash and compare passwords.
+    if (!bcrypt.compareSync(currentPassword, user.password)) {
+      return res.status(401).json({ error: 'Current password is incorrect' });
+    }
+
+    // Hash the new password before saving it
+    const hashedPassword = bcrypt.hashSync(newPassword, 12);
+    user.password = hashedPassword;
+    await user.save();
+    res.json({ message: 'Password updated successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to update password' });
   }
 });
 

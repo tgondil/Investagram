@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { sendUsernameResetEmail, sendPasswordResetEmail } from "./emailService"; // Update the path
 import Sidebar from "../../components/sidebar";
 import Link from 'next/link';
 
