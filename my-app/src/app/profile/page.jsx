@@ -9,10 +9,17 @@ import ReactModal from 'react-modal';
 export default function page() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+
 
   // State hooks for the username change form
   const [newUsername, setNewUsername] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  // State hooks for the email change form
+  const [currentEmail, setCurrentEmail] = useState('');
+  const [emailToChange, setEmailToChange] = useState('');
+  const [verificationToken, setVerificationToken] = useState('');
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => {
@@ -53,6 +60,32 @@ export default function page() {
       backgroundColor: '#f8b47c',
       textAlign: 'center',
     };
+
+    if (successMessage) {
+      return (
+        <div>
+          <div style={{ color: 'green', padding: '20px', textAlign: 'center' }}>
+            {successMessage}
+          </div>
+          <button
+            onClick={() => {
+              setModalContent(null);
+              setSuccessMessage('');
+            }}
+            style={{
+              padding: '10px',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              backgroundColor: '#f8b47c',
+              textAlign: 'center',
+            }}
+          >
+            Go Back
+          </button>
+        </div>
+      );
+    }
+    
     switch (modalContent) {
       case 'username':
         return (
@@ -73,7 +106,50 @@ export default function page() {
           </form>
         );
       case 'email':
-        return <div>Form for email change</div>;
+        return (
+          <form onSubmit={handleEmailChangeRequest} style={{ color: 'white' }}>
+            <label htmlFor="currentEmail">Current Email:</label>
+            <input
+              id="currentEmail"
+              type="email"
+              value={currentEmail}
+              onChange={(e) => setCurrentEmail(e.target.value)}
+              required
+              style={{ margin: '10px 0', color:"black", borderRadius: "8px", padding: '8px', width: 'calc(100% - 16px)' }}
+            />
+            <label htmlFor="emailToChange">New Email:</label>
+            <input
+              id="emailToChange"
+              type="email"
+              value={emailToChange}
+              onChange={(e) => setEmailToChange(e.target.value)}
+              required
+              style={{ margin: '10px 0', color:"black", borderRadius: "8px", padding: '8px', width: 'calc(100% - 16px)' }}
+            />
+            <button type="submit" style={buttonStyle}>
+              Send Verification Code
+            </button>
+            {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
+          </form>
+        );
+      case 'enterVerificationCode':
+        return (
+          <form onSubmit={handleEmailVerification} style={{ color: 'white' }}>
+            <label htmlFor="verificationToken">Verification Code:</label>
+            <input
+              id="verificationToken"
+              type="text"
+              value={verificationToken}
+              onChange={(e) => setVerificationToken(e.target.value)}
+              required
+              style={{ margin: '10px 0', color:"black", borderRadius: "8px", padding: '8px', width: 'calc(100% - 16px)' }}
+            />
+            <button type="submit" style={buttonStyle}>
+              Verify Email Change
+            </button>
+            {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
+          </form>
+        );
       case 'password':
         return <div>Form for password change</div>;
       default:
@@ -100,30 +176,81 @@ export default function page() {
     }
   };
 
-// Function to handle form submission for username change
-const handleUsernameChange = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await fetch('/update-username', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', newUsername }),
-    });
+  // Function to handle form submission for username change
+  const handleUsernameChange = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('/update-username', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', newUsername }),
+      });
 
-    if (!response.ok) {
-      const result = await response.json();
-      throw new Error(result.error);
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.error);
+      }
+
+      // If the update is successful
+      setSuccessMessage('Username updated successfully');
+      setNewUsername('');
+    } catch (error) {
+      setErrorMessage(error.message);
     }
+  };
 
-    // If the update is successful
-    alert('Username updated successfully');
-    closeModal();
-  } catch (error) {
-    setErrorMessage(error.message);
-  }
-};
+  // This function is called when the user submits their old and new email
+  const handleEmailChangeRequest = async (e) => {
+    e.preventDefault();
+    // Call the backend to initiate the email change process
+    try {
+      const response = await fetch('/update-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', currentEmail, emailToChange }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Unknown error occurred');
+      }
+
+      // Move to the next step in the process
+      setModalContent('enterVerificationCode');
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
+
+  // This function is called when the user submits the verification token
+  const handleVerificationTokenSubmission = async (e) => {
+    e.preventDefault();
+    // Call the backend to verify the token and complete the email change process
+    try {
+      const response = await fetch('/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', verificationToken }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Unknown error occurred');
+      }
+  
+      // If successful, show a success message
+      setSuccessMessage('Email updated successfully');
+      setModalContent(null); // or some other state to show a success message
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
 
   return (
     <main className="h-screen bg-shark-950 w-full overflow-hidden">

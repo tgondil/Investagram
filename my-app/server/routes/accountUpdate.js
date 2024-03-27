@@ -78,7 +78,7 @@ router.post('/update-username', async (req, res) => {
   }
 });
 
-router.post('/verify-email', async (req, res) => {
+router.post('/update-email', async (req, res) => {
   const { userId, verificationToken } = req.body;
 
   try {
