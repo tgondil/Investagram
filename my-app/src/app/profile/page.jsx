@@ -25,6 +25,11 @@ export default function page() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
+  // State hooks for the profile picture change form
+  const [profileImage, setProfileImage] = useState(null);
+  const [imageError, setImageError] = useState('');
+
+
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => {
     setModalIsOpen(false);
@@ -182,6 +187,23 @@ export default function page() {
             {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
           </form>
         );
+      case 'changeProfilePicture':
+        return (
+          <form onSubmit={handleProfilePictureChange} style={{ color: 'white' }}>
+            <label htmlFor="profileImage">Upload Profile Picture:</label>
+            <input
+              id="profileImage"
+              type="file"
+              accept=".png,.jpg,.jpeg"
+              onChange={handleProfileImageChange}
+              style={{ margin: '10px 0', color: "black", borderRadius: "8px", padding: '8px' }}
+            />
+            <button type="submit" style={buttonStyle}>
+              Upload
+            </button>
+            {imageError && <div style={{ color: 'red', marginTop: '10px' }}>{imageError}</div>}
+          </form>
+        );
       default:
         return (
           <div 
@@ -201,6 +223,10 @@ export default function page() {
           <button onClick={() => setModalContent('password')} style={buttonStyle}>
             Change Password
           </button>
+          <button onClick={() => setModalContent('changeProfilePicture')} style={buttonStyle}>
+            Change Profile Picture
+          </button>
+
         </div>
         );
     }
@@ -309,6 +335,50 @@ export default function page() {
       setErrorMessage(error.message);
     }
   };
+
+  const handleProfilePictureChange = async (e) => {
+    e.preventDefault();
+  
+    if (!profileImage) {
+      setImageError('Please select a valid image file');
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append('userId', '65fbaddbb53516ddfb4335c6'); // Use actual userId from your user's state or context
+    formData.append('profilePicture', profileImage);
+  
+    try {
+      const response = await fetch('/update-profile-picture', {
+        method: 'POST',
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.error);
+      }
+  
+      setSuccessMessage('Profile picture updated successfully');
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
+  
+  // Makes sure profile image is correct file type and isn't too large
+  const handleProfileImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!['image/png', 'image/jpg', 'image/jpeg'].includes(file.type) || file.size > 5000000) { // 5MB limit
+        setImageError('File must be a PNG, JPG, or JPEG and less than 5MB');
+        setProfileImage(null);
+      } else {
+        setImageError('');
+        setProfileImage(file);
+      }
+    }
+  };
+  
 
   return (
     <main className="h-screen bg-shark-950 w-full overflow-hidden">

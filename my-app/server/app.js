@@ -22,6 +22,9 @@ app.use(messagingRoutes);
 const accountUpdateRoutes = require('./routes/accountUpdate');
 app.use(accountUpdateRoutes);
 
+const profilePictureRoutes = require('./routes/profilePicture');
+app.use(profilePictureRoutes)
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
