@@ -16,7 +16,7 @@ export default function SignUp() {
 
   const handleSignUp = async () => {
     try {
-      const response = await fetch("http://localhost:3000/createAccount", {
+      const response = await fetch("/createAccount", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
