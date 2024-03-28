@@ -23,7 +23,10 @@ const accountUpdateRoutes = require('./routes/accountUpdate');
 app.use(accountUpdateRoutes);
 
 const profilePictureRoutes = require('./routes/profilePicture');
-app.use(profilePictureRoutes)
+app.use(profilePictureRoutes);
+
+const createAccountRoutes = require('./routes/createAccount');
+app.use(createAccountRoutes);
 
 // Start the server
 app.listen(PORT, () => {
