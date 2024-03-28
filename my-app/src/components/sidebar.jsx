@@ -42,7 +42,12 @@ export default function Sidebar() {
       <IoPersonOutline className="mx-2.5"/> Me
       </h1>
       </Link>
-      
+      {/* <Link href={"./stock-search"}>
+      <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
+      <IoIosSearch className="mx-2.5"/> Stock Search
+      </h1>
+      </Link>
+       */}
 
       </div>
     </main>
