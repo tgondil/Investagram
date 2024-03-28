@@ -1,2 +1,0 @@
-This is an example text file for testing purposes.
-You can use it to test file uploads in your Node.js application.
