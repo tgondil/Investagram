@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Sidebar from "../../components/sidebar";
 import { IoHomeOutline } from "react-icons/io5";
 import { LuPencil } from "react-icons/lu";
-import Feed from "@/components/feed";
+import Feed from "../../components/feed";
 import ReactModal from 'react-modal';
 
 export default function page() {
