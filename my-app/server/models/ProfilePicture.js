@@ -12,6 +12,4 @@ const profilePictureSchema = new mongoose.Schema({
   }
 });
 
-const ProfilePicture = mongoose.model('ProfilePicture', profilePictureSchema);
-
-module.exports = ProfilePicture;
+module.exports = mongoose.model('ProfilePicture', profilePictureSchema);
