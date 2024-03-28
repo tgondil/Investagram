@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const ProfilePicture = require('../models/ProfilePicture');
+const User = require('../models/User'); // Import the User model
 
 // Configure multer for image storage
 const storage = multer.memoryStorage();
@@ -15,22 +15,17 @@ router.post('/update-profile-picture', upload.single('profilePicture'), async (r
   }
 
   try {
-    // Check if a profile picture already exists for the user and update it, or create a new one
-    const existingProfilePic = await ProfilePicture.findOne({ userId: userId });
-    if (existingProfilePic) {
-      existingProfilePic.image.data = req.file.buffer;
-      existingProfilePic.image.contentType = req.file.mimetype;
-      await existingProfilePic.save();
-    } else {
-      const newProfilePic = new ProfilePicture({
-        userId: userId,
-        image: {
-          data: req.file.buffer,
-          contentType: req.file.mimetype
-        }
-      });
-      await newProfilePic.save();
+    // Find the user by ID and update the profile picture
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
+
+    // Update the user's profile picture data
+    user.profilePicture.data = req.file.buffer;
+    user.profilePicture.contentType = req.file.mimetype;
+
+    await user.save();
 
     res.json({ message: 'Profile picture updated successfully' });
   } catch (err) {
