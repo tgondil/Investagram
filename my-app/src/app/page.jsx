@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import "./style.css";
 import React from "react";

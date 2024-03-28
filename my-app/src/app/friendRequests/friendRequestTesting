@@ -1,7 +1,7 @@
 const request = require('supertest');
-const app = require('../path/to/your/app'); // Update the path
-const userService = require('../services/userService'); // Update the path
-const friendService = require('../services/friendService'); // Update the path
+const app = require('./my-app/'); // Update the path
+const userService = require('./userService'); // Update the path
+const friendService = require('./friendRequestService'); // Update the path
 
 // Mocking user data for testing
 const mockUser1 = {
