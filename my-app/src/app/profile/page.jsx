@@ -21,6 +21,10 @@ export default function page() {
   const [emailToChange, setEmailToChange] = useState('');
   const [verificationToken, setVerificationToken] = useState('');
 
+  // State hooks for the password change form
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => {
     setModalIsOpen(false);
@@ -71,6 +75,7 @@ export default function page() {
             onClick={() => {
               setModalContent(null);
               setSuccessMessage('');
+              setErrorMessage('');
             }}
             style={{
               padding: '10px',
@@ -151,7 +156,32 @@ export default function page() {
           </form>
         );
       case 'password':
-        return <div>Form for password change</div>;
+        return (
+          <form onSubmit={handlePasswordChange} style={{ color: 'white' }}>
+            <label htmlFor="currentPassword">Current Password:</label>
+            <input
+              id="currentPassword"
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              required
+              style={{ margin: '10px 0', color:"black", borderRadius: "8px", padding: '8px', width: 'calc(100% - 16px)' }}
+            />
+            <label htmlFor="newPassword">New Password:</label>
+            <input
+              id="newPassword"
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+              style={{ margin: '10px 0', color:"black", borderRadius: "8px", padding: '8px', width: 'calc(100% - 16px)' }}
+            />
+            <button type="submit" style={buttonStyle}>
+              Change Password
+            </button>
+            {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
+          </form>
+        );
       default:
         return (
           <div 
@@ -211,7 +241,7 @@ export default function page() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', currentEmail, emailToChange }),
+        body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', curremail: currentEmail, newemail: emailToChange }),
       });
 
       const data = await response.json();
@@ -227,7 +257,7 @@ export default function page() {
   };
 
   // This function is called when the user submits the verification token
-  const handleVerificationTokenSubmission = async (e) => {
+  const handleEmailVerification = async (e) => {
     e.preventDefault();
     // Call the backend to verify the token and complete the email change process
     try {
@@ -236,7 +266,7 @@ export default function page() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', verificationToken }),
+        body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', verificationToken: verificationToken }),
       });
 
       const data = await response.json();
@@ -246,7 +276,35 @@ export default function page() {
   
       // If successful, show a success message
       setSuccessMessage('Email updated successfully');
+      setCurrentEmail('');
+      setEmailToChange('');
+      setVerificationToken('');
       setModalContent(null); // or some other state to show a success message
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('/update-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', currentPassword: currentPassword, newPassword: newPassword }),
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.error);
+      }
+
+      // If the update is successful
+      setSuccessMessage('Password updated successfully');
+      setCurrentPassword('');
+      setNewPassword('');
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -269,7 +327,7 @@ export default function page() {
                 </div>
                 <div>
                   <h1 className="text-3xl flex justify-center items-center font-poppins font-normal animate-text bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent">
-                    therealtanayg
+                    name
                   </h1>
                   <button
                     onClick={handleEditProfileClick}
