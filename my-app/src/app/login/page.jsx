@@ -1,4 +1,5 @@
 'use client';
+import Cookies from 'js-cookie'
 import React, { useState } from 'react';
 import Link from "next/link";
 import toast, { Toaster } from 'react-hot-toast';
@@ -23,6 +24,7 @@ export default function Login() {
       if (response.ok) {
         toast.success('Logged in successfully!');
         console.log("Logged in successfully");
+        Cookies.set('name', username)
         router.push('/home');
       } else {
         toast.error('Login failed!');

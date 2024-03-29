@@ -9,7 +9,7 @@ const StockSearchPage = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [stockData, setStockData] = useState(null);
 
-  const apiKey = "UVHRM0C06E7HSYBI"; // Replace with your actual API key
+  const apiKey = "EOKPKWT5S708YGQF"; // Replace with your actual API key
 
   useEffect(() => {
     if (searchTerm.length > 1) {
@@ -78,17 +78,17 @@ const StockSearchPage = () => {
                 onKeyDown={handleEnter}
               />
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded"
                 onClick={() => handleSearch(searchTerm)}
               >
                 Enter
               </button>
               {suggestions.length > 0 && (
-                <ul className="absolute top-full mt-1 w-3/4 bg-white shadow-xl rounded-lg z-10">
+                <ul className="absolute top-full mt-1 w-3/4 bg-white text-black shadow-xl rounded-lg z-10">
                   {suggestions.map((item, index) => (
                     <li
                       key={index}
-                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer text-black "
                       onClick={() => handleSearch(item['1. symbol'])}
                     >
                       {item['1. symbol']} - {item['2. name']}
@@ -109,7 +109,7 @@ const StockSearchPage = () => {
                 </div>
                 <button
                   onClick={addToWatchlist}
-                  className="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
+                  className="mt-4 bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded"
                 >
                   ★ Add to Watchlist
                 </button>

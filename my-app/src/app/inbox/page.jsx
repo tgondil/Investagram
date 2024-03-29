@@ -21,6 +21,7 @@ function page() {
   const syncConversation = useCallback((session) => {
     // JavaScript SDK code here
     const conversation = session.getOrCreateConversation('welcome');
+    
 
     const other = new Talk.User({
       id: 'frank',
@@ -42,13 +43,14 @@ function page() {
   return (
     <main className="h-screen bg-shark-950 w-full overflow-hidden">
 
-      <div className="h-screen bg-shark-950 w-full overflow-hidden">
-        <div className="flex">
+      <div className="h-screen bg-shark-950 w-full h-full overflow-hidden">
+        <div className="flex w-full h-full">
         <Sidebar></Sidebar>
-        <Session appId="tOZXp50G" syncUser={syncUser}>
+        <Session appId="tOZXp50G" className="w-full" syncUser={syncUser}>
           <Chatbox
+
             syncConversation={syncConversation}
-            style={{ width: '100%', height: '500px' }}
+            style={{ width: '100%', height: '100%' }}
           ></Chatbox>
         </Session>
         </div>

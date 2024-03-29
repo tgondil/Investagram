@@ -1,5 +1,5 @@
 "use client";
-import Sidebar from "@/components/sidebar";
+import Sidebar from "../../components/sidebar";
 import React, { useState } from "react";
 
 export default function Feed() {
