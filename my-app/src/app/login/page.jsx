@@ -1,12 +1,11 @@
 'use client';
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom'; // Import useHistory
 import Link from "next/link";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
 
   const handleLogin = async () => {
     try {
@@ -19,16 +18,15 @@ export default function Login() {
       });
 
       if (response.ok) {
+        toast.success('Logged in successfully!');
         console.log("Logged in successfully");
-        // Redirect to home page
-        history.push('/home');
       } else {
+        toast.error('Login failed!');
         console.error("Failed to log in");
-        // Redirect to reset page
-        history.push('/usernamePasswordReset');
       }
     } catch (error) {
       console.error("Error logging in", error);
+      toast.error('Login failedd!');
     }
   };
 
@@ -100,6 +98,10 @@ export default function Login() {
             </div>
           </div>
         </div>
+        <Toaster
+  position="bottom-center"
+  reverseOrder={false}
+/>
       </main>
     </>
   );

@@ -31,6 +31,9 @@ app.use(createAccountRoutes);
 const accountInfoRoutes = require('./routes/accountInfo');
 app.use(accountInfoRoutes);
 
+const accountLoginRoutes = require('./routes/accountLogin');
+app.use(accountLoginRoutes);
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
