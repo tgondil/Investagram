@@ -1,4 +1,5 @@
 'use client';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 import React, { useState } from 'react';
@@ -27,15 +28,17 @@ export default function SignUp() {
 
       if (response.ok) {
         console.log("Account created successfully");
+        toast.success('Account created successfully!')
         // Redirect to login page
-        history.push('/login');
         
       } else {
         console.error("Failed to create account");
+        toast.error('Account creation failed!')
       
       }
     } catch (error) {
       console.error("Error creating account:", error);
+      toast.success('Account creation failed!')
      
     }
   };
@@ -122,6 +125,10 @@ export default function SignUp() {
             </Link>
           </h1>
         </div>
+        <Toaster
+  position="bottom-center"
+  reverseOrder={false}
+/>
       </main>
     </>
   );

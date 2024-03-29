@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom'; // Import useHistory
 import Link from "next/link";
