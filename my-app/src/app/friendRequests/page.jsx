@@ -7,7 +7,7 @@ const FriendRequests = () => {
   const [incomingRequests, setIncomingRequests] = useState([
     { senderName: "Mohanna", _id: "1" },
     { senderName: "Arjav", _id: "2" },
-    { senderName: "Tanay", _id: "3" },
+    { senderName: "Elliot", _id: "3" },
   ]);
   const [sentRequests, setSentRequests] = useState([]);
   const [friendsList, setFriendsList] = useState([]);
