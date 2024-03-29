@@ -1,8 +1,9 @@
 // /my-app/src/app/friendRequests/friendAPI.js
 
-// Import necessary modules
 const express = require('express');
 const mongoose = require('mongoose');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 // Create an Express application
 const app = express();
@@ -20,9 +21,39 @@ mongoose.connect(uri, {
 // Define MongoDB schema and model for FriendRequest
 const friendRequestSchema = new mongoose.Schema({
   senderName: String,
+  senderEmail: String,
 });
 
 const FriendRequest = mongoose.model('FriendRequest', friendRequestSchema);
+
+// Function to send email notification for friend request
+async function sendFriendRequestEmail(receiverEmail, senderName) {
+  // Create a Nodemailer transporter
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'ellsmith1309@gmail.com', // Your Gmail email address
+      pass: '2100Smith', // Your Gmail password or App Password
+    },
+  });
+
+  // Define email options
+  const mailOptions = {
+    from: 'Investagram <ellsmith1309@gmail.com>',
+    to: receiverEmail,
+    subject: 'You have received a friend request',
+    html: `<p>Tanay has sent you a friend request.</p>`,
+  };
+
+  // Send email
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Friend request notification sent successfully");
+  } catch (error) {
+    console.error("Error sending friend request notification:", error);
+    throw new Error("Failed to send friend request notification");
+  }
+}
 
 // Route to accept a friend request
 app.post('/api/friendRequests/accept', async (req, res) => {
@@ -51,9 +82,13 @@ app.post('/api/friendRequests/reject', async (req, res) => {
 // Route to send a friend request
 app.post('/api/friendRequests/send', async (req, res) => {
   try {
-    const { friendName } = req.body;
-    const newRequest = new FriendRequest({ senderName: friendName });
+    const { friendName, friendEmail } = req.body;
+    const newRequest = new FriendRequest({ senderName: friendName, senderEmail: friendEmail });
     await newRequest.save();
+    
+    // Send friend request email notification
+    await sendFriendRequestEmail(friendEmail, friendName);
+    
     res.json({ success: true, requestId: newRequest._id });
   } catch (error) {
     console.error('Error sending friend request:', error);
