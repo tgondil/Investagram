@@ -34,9 +34,17 @@ export default function Sidebar() {
       <IoMailOutline className="mx-2.5 mt-0.5"/> Inbox
       </h1>
       </Link>
+      <Link href={"./watchlist"}>
       <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5  text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
       <IoBookmarksOutline className="mx-2.5"/> Watchlist
       </h1>
+      </Link>
+      <Link href={"./stockSearch"}>
+      <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5  text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
+      <IoBookmarksOutline className="mx-2.5"/> Search Stocks
+      </h1>
+      </Link>
+
       <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5  text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
       <IoMdNotificationsOutline className="mx-2.5"/> Notifications
       </h1>
