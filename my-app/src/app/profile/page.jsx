@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from "../../components/sidebar";
 import { IoHomeOutline } from "react-icons/io5";
 import { LuPencil } from "react-icons/lu";
@@ -26,9 +26,25 @@ export default function page() {
   const [newPassword, setNewPassword] = useState('');
 
   // State hooks for the profile picture change form
-  const [profileImage, setProfileImage] = useState(null);
+  const [newprofileImage, setNewProfileImage] = useState(null);
   const [imageError, setImageError] = useState('');
 
+  // State hooks for getting username and profile picture of user, uses a set userID
+  const [username, setUsername] = useState('');
+  const [profilePicture, setProfilePicture] = useState('');
+
+  // replace 'userId' with the actual user ID
+  const userId = '65fbaddbb53516ddfb4335c6';
+
+  useEffect(() => {
+    fetch(`/userID/${userId}`)
+      .then(response => response.json())
+      .then(data => {
+        setUsername(data.username);
+        setProfilePicture(data.profilePicture);
+      })
+      .catch(error => console.error('Error fetching user data:', error));
+  }, []);
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => {
@@ -241,7 +257,7 @@ export default function page() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', newUsername }),
+        body: JSON.stringify({ userId: userId, newUsername }),
       });
 
       if (!response.ok) {
@@ -267,7 +283,7 @@ export default function page() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', curremail: currentEmail, newemail: emailToChange }),
+        body: JSON.stringify({ userId: userId, curremail: currentEmail, newemail: emailToChange }),
       });
 
       const data = await response.json();
@@ -292,7 +308,7 @@ export default function page() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', verificationToken: verificationToken }),
+        body: JSON.stringify({ userId: userId, verificationToken: verificationToken }),
       });
 
       const data = await response.json();
@@ -319,7 +335,7 @@ export default function page() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: '65fbaddbb53516ddfb4335c6', currentPassword: currentPassword, newPassword: newPassword }),
+        body: JSON.stringify({ userId: userId, currentPassword: currentPassword, newPassword: newPassword }),
       });
 
       if (!response.ok) {
@@ -339,14 +355,14 @@ export default function page() {
   const handleProfilePictureChange = async (e) => {
     e.preventDefault();
   
-    if (!profileImage) {
+    if (!newprofileImage) {
       setImageError('Please select a valid image file');
       return;
     }
   
     const formData = new FormData();
-    formData.append('userId', '65fbaddbb53516ddfb4335c6'); // Use actual userId from your user's state or context
-    formData.append('profilePicture', profileImage);
+    formData.append('userId', userId); // Use actual userId from your user's state or context
+    formData.append('profilePicture', newprofileImage);
   
     try {
       const response = await fetch('/update-profile-picture', {
@@ -371,10 +387,10 @@ export default function page() {
     if (file) {
       if (!['image/png', 'image/jpg', 'image/jpeg'].includes(file.type) || file.size > 5000000) { // 5MB limit
         setImageError('File must be a PNG, JPG, or JPEG and less than 5MB');
-        setProfileImage(null);
+        setNewProfileImage(null);
       } else {
         setImageError('');
-        setProfileImage(file);
+        setNewProfileImage(file);
       }
     }
   };
@@ -392,11 +408,11 @@ export default function page() {
             <div className="mt-4 w-4/5 h-full flex flex-col justify-center items-center">
               <div className="w-full flex justify-center items-center gap-10 h-2/5">
                 <div className="w-40 h-40 rounded-full">
-                  <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="placeholder" className="object-contain rounded-full" />
+                  <img src={profilePicture || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} className="object-contain rounded-full" />
                 </div>
                 <div>
                   <h1 className="text-3xl flex justify-center items-center font-poppins font-normal animate-text bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent">
-                    username
+                    {username || 'Username'}
                   </h1>
                   <button
                     onClick={handleEditProfileClick}
