@@ -32,14 +32,14 @@ async function sendFriendRequestEmail(receiverEmail, senderName) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'ellsmith1309@gmail.com', // Your Gmail email address
-      pass: '2100Smith', // Your Gmail password or App Password
+      user: 'investagram76@gmail.com', // Your Gmail email address
+      pass: 'cs307project', // Your Gmail password or App Password
     },
   });
 
   // Define email options
   const mailOptions = {
-    from: 'Investagram <ellsmith1309@gmail.com>',
+    from: 'Investagram <investagram76@gmail.com>',
     to: receiverEmail,
     subject: 'You have received a friend request',
     html: `<p>Tanay has sent you a friend request.</p>`,
