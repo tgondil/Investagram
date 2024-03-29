@@ -10,6 +10,12 @@ export default function ResetPage() {
   const [resetStatus, setResetStatus] = useState(null);
 
   const handleReset = async () => {
+    // Email validation check
+    if (!email.includes('@')) {
+      alert('Invalid email. Please enter a valid email address.');
+      return;
+    }
+
     try {
       // Call the backend to send reset email
       if (resetType === "username") {
@@ -54,13 +60,13 @@ export default function ResetPage() {
                     className="block text-tacao-300 text-sm font-light mb-2"
                     htmlFor="email"
                   >
-                    Enter Your {resetType === "username" ? "Email" : "Username"}
+                    Enter Your {resetType === "username" ? "Email" : "Email"} For Your Account
                   </label>
                   <input
                     className="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="email"
                     type={resetType === "username" ? "email" : "text"}
-                    placeholder={`Your ${resetType === "username" ? "Email" : "Username"} Address`}
+                    placeholder={`Your ${resetType === "username" ? "Email" : "Email"} Address`}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
