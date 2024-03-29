@@ -4,12 +4,13 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import React, { useState } from 'react';
 import Link from "next/link";
-
+import { useRouter } from 'next/navigation'
 
 
 
 
 export default function SignUp() {
+  const router = useRouter();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -29,7 +30,7 @@ export default function SignUp() {
       if (response.ok) {
         console.log("Account created successfully");
         toast.success('Account created successfully!')
-        // Redirect to login page
+        router.push('/login');
         
       } else {
         console.error("Failed to create account");

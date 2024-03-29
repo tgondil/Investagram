@@ -2,12 +2,15 @@
 import React, { useState } from 'react';
 import Link from "next/link";
 import toast, { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/navigation'
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleLogin = async () => {
+    
     try {
       const response = await fetch("/accountLogin", {
         method: "POST",
@@ -20,6 +23,7 @@ export default function Login() {
       if (response.ok) {
         toast.success('Logged in successfully!');
         console.log("Logged in successfully");
+        router.push('/home');
       } else {
         toast.error('Login failed!');
         console.error("Failed to log in");
