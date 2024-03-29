@@ -414,6 +414,7 @@ export default function page() {
                 <div>
                   <h1 className="text-3xl flex justify-center items-center font-poppins font-normal animate-text bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent">
                     {Cookies.get('name')}
+                    {/*{username || 'Username'}*/}
                   </h1>
                   <button
                     onClick={handleEditProfileClick}
