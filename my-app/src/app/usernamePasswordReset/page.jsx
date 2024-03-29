@@ -81,7 +81,7 @@ export default function ResetPage() {
                   </p>
                 )}
               </div>
-              <div className="mt-4 text-xl font-poppins font-normal flex items-center justify-center pt-6">
+              <div className="bg-teal-500 text-white px-4 py-2 rounded-lg mb-4 hover:bg-teal-600 transition duration-300 justify-center">
                 Remember your details?{" "}
                 <Link
                   className="pl-1.5 hover:animate-text hover:font-bold hover:bg-gradient-to-r hover:from-teal-500 hover:via-tacao-300 hover:to-teal-500 hover:bg-clip-text hover:text-transparent"
