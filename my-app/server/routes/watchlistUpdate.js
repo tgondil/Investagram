@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const UserProfile = require('../models/UserProfile'); // Import the UserProfile model
+const UserProfile = require('../models/User'); // Import the UserProfile model
 
 // Route to add a stock to the user's watchlist
 router.post('/watchlist/add', async (req, res) => {

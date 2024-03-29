@@ -8,15 +8,28 @@ const WatchlistPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [watchlist, setWatchlist] = useState([]);
-  const apiKey = "UVHRM0C06E7HSYBI"; // Use your API key
+  const apiKey = "UVHRM0C06E7HSYBI"; // Use your actual API key
 
   useEffect(() => {
     fetchWatchlist();
   }, []);
 
+  useEffect(() => {
+    if (searchTerm.length > 1) {
+      fetchSymbolSuggestions();
+    } else {
+      setSuggestions([]);
+    }
+  }, [searchTerm]);
+
   const fetchWatchlist = async () => {
-    // Dummy initial data, replace with your API call
-    setWatchlist([{ symbol: 'AAPL', name: 'Apple Inc.' }, { symbol: 'MSFT', name: 'Microsoft Corporation' }]);
+    // Here you would fetch the actual watchlist from your backend or local storage
+    // This is a placeholder for initial data
+    setWatchlist([{ symbol: 'AAPL', name: 'Apple Inc.', price: 'Fetching...' }, { symbol: 'MSFT', name: 'Microsoft Corporation', price: 'Fetching...' }]);
+    // Fetch prices for the initial watchlist
+    watchlist.forEach(stock => {
+      fetchStockPrice(stock.symbol);
+    });
   };
 
   const fetchSymbolSuggestions = async () => {
@@ -30,30 +43,42 @@ const WatchlistPage = () => {
     }
   };
 
-  const handleSearch = async (symbol) => {
-    setSearchTerm(symbol);
-    setSuggestions([]); // Hide suggestions after selection
-
+  const fetchStockPrice = async (symbol) => {
     const priceUrl = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`;
     try {
       const response = await fetch(priceUrl);
       const { 'Global Quote': globalQuote } = await response.json();
       if (globalQuote) {
-        addToWatchlist({ symbol, price: globalQuote['05. price'] });
+        const price = globalQuote['05. price'];
+        // Update watchlist with the new price
+        setWatchlist(currentList =>
+          currentList.map(stock =>
+            stock.symbol === symbol ? { ...stock, price } : stock
+          )
+        );
       }
     } catch (error) {
       console.error('Error fetching stock price:', error);
     }
   };
 
-  const addToWatchlist = (stock) => {
-    if (!watchlist.find(s => s.symbol === stock.symbol)) {
-      setWatchlist([...watchlist, stock]);
+  const handleSearch = async (symbol) => {
+    setSearchTerm(symbol);
+    setSuggestions([]);
+    fetchStockPrice(symbol);
+  };
+
+  const addToWatchlist = (symbol) => {
+    const stockAlreadyInWatchlist = watchlist.some(stock => stock.symbol === symbol);
+    if (!stockAlreadyInWatchlist) {
+      const newStock = { symbol, name: 'Fetching...', price: 'Fetching...' };
+      setWatchlist([...watchlist, newStock]);
+      fetchStockPrice(symbol);
     }
   };
 
   const removeFromWatchlist = (symbol) => {
-    setWatchlist(watchlist.filter(s => s.symbol !== symbol));
+    setWatchlist(watchlist.filter(stock => stock.symbol !== symbol));
   };
 
   return (
@@ -70,11 +95,11 @@ const WatchlistPage = () => {
                 className="text-m w-3/4 font-semibold py-2 px-4 rounded-lg shadow-xl focus:outline-none"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch(searchTerm)}
+                onKeyDown={(e) => e.key === 'Enter' && addToWatchlist(searchTerm)}
               />
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => handleSearch(searchTerm)}
+                onClick={() => addToWatchlist(searchTerm)}
               >
                 Add
               </button>
