@@ -25,6 +25,21 @@ const FriendRequests = () => {
   };
 
   const sendFriendRequest = () => {
+    // Check if the receiver's email is valid
+    if (!receiverEmail.includes('@')) {
+      alert('Invalid email. Please enter a valid email address.');
+      return;
+    }
+    // Update sent friend requests with the new friend's name
+  setSentRequests(prevSentRequests => [
+    ...prevSentRequests,
+    { receiverName: newFriendName, _id: Date.now().toString() } // Generate a unique ID
+  ]);
+
+  // Clear the input fields after adding the request
+  setNewFriendName('');
+  setReceiverEmail('');
+  
     // Send friend request to the typed friend name
     fetch('/api/friendRequests/send', {
       method: 'POST',
@@ -40,7 +55,7 @@ const FriendRequests = () => {
       .then(data => {
         console.log(data);
         if (data.success) {
-          // Update sent friend requests
+          // Update sent friend requests only if the email is valid
           setSentRequests(prevSentRequests => [
             ...prevSentRequests,
             { receiverName: newFriendName, _id: data.requestId }
