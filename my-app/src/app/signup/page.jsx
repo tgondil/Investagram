@@ -2,7 +2,6 @@
 
 
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom'; // Import useHistory
 import Link from "next/link";
 
 
@@ -14,7 +13,6 @@ export default function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
 
 
   const handleSignUp = async () => {
