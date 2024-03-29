@@ -28,6 +28,9 @@ app.use(profilePictureRoutes);
 const createAccountRoutes = require('./routes/createAccount');
 app.use(createAccountRoutes);
 
+const accountInfoRoutes = require('./routes/accountInfo');
+app.use(accountInfoRoutes);
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

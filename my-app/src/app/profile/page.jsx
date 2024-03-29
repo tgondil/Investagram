@@ -391,13 +391,12 @@ export default function page() {
           >
             <div className="mt-4 w-4/5 h-full flex flex-col justify-center items-center">
               <div className="w-full flex justify-center items-center gap-10 h-2/5">
-              
                 <div className="w-40 h-40 rounded-full">
-                <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="placeholder" className="object-contain rounded-full" />
+                  <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="placeholder" className="object-contain rounded-full" />
                 </div>
                 <div>
                   <h1 className="text-3xl flex justify-center items-center font-poppins font-normal animate-text bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent">
-                    name
+                    username
                   </h1>
                   <button
                     onClick={handleEditProfileClick}
@@ -438,31 +437,19 @@ export default function page() {
                     </h1>
                   </div>
                 </div>
-            </div>
+              </div>
               <div className="h-1/5 w-full flex justify-center items-center border-b border-dotted">
                 <div className="w-1/3">
-                <h1 className="text-tacao-300 text-m font-bold"> 
-                    Tanay Gondil
-                </h1>
-                <h1 className="text-tacao-300 mt-2">
-                    @purduecs || Pune
-                </h1>
-                <div className="flex justify-center items-center">
-                <h1 className=" animate-text w-1/3 bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent my-10 mt-7 pb-3 text-xl font-semibold flex justify-center border-b-2 border-teal-500">
-                    My Posts
-                </h1>
+                  <div className="flex justify-center items-center">
+                    <h1 className=" animate-text w-1/3 bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent my-10 mt-7 pb-3 text-xl font-semibold flex justify-center border-b-2 border-teal-500">
+                        My Posts
+                    </h1>
+                  </div>
                 </div>
-                
-                </div>
-                
               </div>
               <Feed className="w-5/12"></Feed>
             </div>
-            
-            
-            
           </div>
-          
         </div>
       </div>
     </main>
