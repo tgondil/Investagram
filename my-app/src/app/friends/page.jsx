@@ -53,6 +53,11 @@ const FriendsPage = () => {
             <h1 className="text-4xl font-bold animate-rainbow mb-8 text-tacao-300">
               Friend Tiers
             </h1>
+            <div className="text-gray-400 mb-4">
+              <p>Tier 1: Friend wouldn't get to see any private information, just public posts.</p>
+              <p>Tier 2: Friend would get to see private posts about decisions and polls.</p>
+              <p>Tier 3: Friend would get to see all parts of your profile and portfolio that you make available.</p>
+            </div>
             <div className="w-full flex flex-col gap-4">
               {friends.map((friend) => (
                 <div
