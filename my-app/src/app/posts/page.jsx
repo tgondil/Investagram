@@ -1,14 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/sidebar";
 import { LuPencil } from "react-icons/lu";
 
 export default function PostManagementPage({ currentUser }) {
   const [posts, setPosts] = useState([
     // Initial posts data
-    { id: 1, title: "What stocks should I buy", content: "I think I want to buy 1000 units of Tesla", createdBy: "user1", likes: 0, likedBy: [], comments: [] },
-    { id: 2, title: "What's happening with the market", content: "I don't understand what is happening, can someone explain it?", createdBy: "user2", likes: 0, likedBy: [], comments: [] },
-    { id: 3, title: "Positive vibes check in", content: "How is everyone feeling today :)", createdBy: "user1", likes: 0, likedBy: [], comments: [] },
+    { id: 1, title: "What stocks should I buy", content: "I think I want to buy 1000 units of Tesla", createdBy: "user1", likes: 0, likedBy: [], comments: [], timestamp: Date.now() },
+    { id: 2, title: "What's happening with the market", content: "I don't understand what is happening, can someone explain it?", createdBy: "user2", likes: 0, likedBy: [], comments: [], timestamp: Date.now() },
+    { id: 3, title: "Positive vibes check in", content: "How is everyone feeling today :)", createdBy: "user1", likes: 0, likedBy: [], comments: [], timestamp: Date.now() },
   ]);
 
   const [newPost, setNewPost] = useState({ title: "", content: "" });
@@ -16,10 +16,16 @@ export default function PostManagementPage({ currentUser }) {
   const [commentText, setCommentText] = useState(""); // State to track the comment text
   const [showCommentBox, setShowCommentBox] = useState(null); // State to track which post's comment box is shown
 
+  useEffect(() => {
+    // Sort posts by timestamp in descending order to display most recent posts first
+    setPosts(prevPosts => prevPosts.sort((a, b) => b.timestamp - a.timestamp));
+  }, []);
+
   const handleAddPost = () => {
     // Logic to add a new post
     const id = posts.length + 1;
-    setPosts([...posts, { id, ...newPost, createdBy: currentUser, likes: 0, likedBy: [], comments: [] }]);
+    const timestamp = Date.now(); // Get current timestamp
+    setPosts([{ id, ...newPost, createdBy: currentUser, likes: 0, likedBy: [], comments: [], timestamp }, ...posts]);
     setNewPost({ title: "", content: "" }); // Clear input fields after adding
   };
 
