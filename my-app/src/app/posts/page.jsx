@@ -3,47 +3,57 @@ import React, { useState } from "react";
 import Sidebar from "../../components/sidebar";
 import { LuPencil } from "react-icons/lu";
 
-export default function PostManagementPage() {
-    const [posts, setPosts] = useState([
-      // Initial posts data
-      { id: 1, title: "What stocks should I buy", content: "I think I want to buy 1000 units of Tesla" },
-      { id: 2, title: "What's happening with the market", content: "I don't understand what is happening, can someone explain it?" },
-      { id: 3, title: "Positive vibes check in", content: "How is everyone feeling today :)" },
-    ]);
-  
-    const [newPost, setNewPost] = useState({ title: "", content: "" });
-    const [editingPost, setEditingPost] = useState(null); // State to track the post being edited
-  
-    const handleAddPost = () => {
-      // Logic to add a new post
-      const id = posts.length + 1;
-      setPosts([...posts, { id, ...newPost }]);
-      setNewPost({ title: "", content: "" }); // Clear input fields after adding
-    };
-  
-    const handleEditPost = (post) => {
+export default function PostManagementPage({ currentUser }) {
+  const [posts, setPosts] = useState([
+    // Initial posts data
+    { id: 1, title: "What stocks should I buy", content: "I think I want to buy 1000 units of Tesla", createdBy: "user1" },
+    { id: 2, title: "What's happening with the market", content: "I don't understand what is happening, can someone explain it?", createdBy: "user2" },
+    { id: 3, title: "Positive vibes check in", content: "How is everyone feeling today :)", createdBy: "user1" },
+  ]);
+
+  const [newPost, setNewPost] = useState({ title: "", content: "" });
+  const [editingPost, setEditingPost] = useState(null); // State to track the post being edited
+
+  const handleAddPost = () => {
+    // Logic to add a new post
+    const id = posts.length + 1;
+    setPosts([...posts, { id, ...newPost, createdBy: currentUser }]);
+    setNewPost({ title: "", content: "" }); // Clear input fields after adding
+  };
+
+  const handleEditPost = (post) => {
+    // Check if the current user matches the creator of the post
+    if (currentUser === post.createdBy) {
       // Set the post to be edited in the state
       setEditingPost(post);
       setNewPost({ title: post.title, content: post.content }); // Initialize input fields with existing post details
-    };
-  
-    const handleSaveEdit = () => {
-      // Logic to save the edited post
-      setPosts((prevPosts) =>
-        prevPosts.map((prevPost) =>
-          prevPost.id === editingPost.id ? { id: editingPost.id, ...newPost } : prevPost
-        )
-      );
-      setEditingPost(null); // Clear editing state
-      setNewPost({ title: "", content: "" }); // Clear input fields after editing
-    };
-  
-    const handleDeletePost = (id) => {
-      // Logic to delete a post
+    } else {
+      alert("You can only edit your own posts.");
+    }
+  };
+
+  const handleSaveEdit = () => {
+    // Logic to save the edited post
+    setPosts((prevPosts) =>
+      prevPosts.map((prevPost) =>
+        prevPost.id === editingPost.id ? { ...prevPost, ...newPost } : prevPost
+      )
+    );
+    setEditingPost(null); // Clear editing state
+    setNewPost({ title: "", content: "" }); // Clear input fields after editing
+  };
+
+  const handleDeletePost = (id) => {
+    // Logic to delete a post
+    const postToDelete = posts.find((post) => post.id === id);
+    if (currentUser === postToDelete.createdBy) {
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
       setEditingPost(null); // Clear editing state
       setNewPost({ title: "", content: "" }); // Clear input fields after deleting
-    };
+    } else {
+      alert("You can only delete your own posts.");
+    }
+  };
 
   return (
     <main className="h-screen bg-shark-950 w-full overflow-hidden">
@@ -97,20 +107,22 @@ export default function PostManagementPage() {
                         <h2 className="text-lg font-semibold font-poppins">
                           {post.title}
                         </h2>
-                        <div className="flex gap-4">
-                          <button
-                            className="bg-teal-500 text-white px-3 py-1 rounded-lg hover:bg-teal-600 transition duration-300"
-                            onClick={() => handleEditPost(post)}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition duration-300"
-                            onClick={() => handleDeletePost(post.id)}
-                          >
-                            Delete
-                          </button>
-                        </div>
+                        {currentUser === post.createdBy && (
+                          <div className="flex gap-4">
+                            <button
+                              className="bg-teal-500 text-white px-3 py-1 rounded-lg hover:bg-teal-600 transition duration-300"
+                              onClick={() => handleEditPost(post)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition duration-300"
+                              onClick={() => handleDeletePost(post.id)}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        )}
                       </div>
                       <p className="text-sm">{post.content}</p>
                     </div>
