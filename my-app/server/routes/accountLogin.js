@@ -14,8 +14,20 @@ router.post('/accountLogin', async (req, res) => {
       const passwordMatch = await bcrypt.compare(password, existingUser.password);
 
       if (passwordMatch) {
-        // Passwords match, user authentication successful
-        res.json({ message: 'Logged in successfully' });
+        let userProfile = {
+          userID: existingUser._id,
+          profilePicture: existingUser.profilePicture.defaultUrl
+        };
+
+        // If profile picture is stored as binary data
+        if (existingUser.profilePicture && existingUser.profilePicture.data) {
+          userProfile.profilePicture = `data:${existingUser.profilePicture.contentType};base64,${existingUser.profilePicture.data.toString('base64')}`;
+        }
+        
+        res.json({
+          message: 'Logged in successfully',
+          userProfile: userProfile
+        });
       } else {
         // Passwords don't match, authentication failed
         res.status(401).json({ error: 'Invalid credentials' });

@@ -35,7 +35,7 @@ export default function page() {
   const [profilePicture, setProfilePicture] = useState('');
 
   // replace 'userId' with the actual user ID
-  const userId = '65fbaddbb53516ddfb4335c6';
+  const userId = Cookies.get('userID');
 
   useEffect(() => {
     fetch(`/userID/${userId}`)
@@ -409,12 +409,11 @@ export default function page() {
             <div className="mt-4 w-4/5 h-full flex flex-col justify-center items-center">
               <div className="w-full flex justify-center items-center gap-10 h-2/5">
                 <div className="w-40 h-40 rounded-full">
-                  <img src={profilePicture || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} className="object-contain rounded-full" />
+                  <img src={profilePicture} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} className="object-contain rounded-full" />
                 </div>
                 <div>
                   <h1 className="text-3xl flex justify-center items-center font-poppins font-normal animate-text bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent">
-                    {Cookies.get('name')}
-                    {/*{username || 'Username'}*/}
+                    {username}
                   </h1>
                   <button
                     onClick={handleEditProfileClick}

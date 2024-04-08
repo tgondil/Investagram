@@ -22,9 +22,12 @@ export default function Login() {
       });
 
       if (response.ok) {
+        const data = await response.json();
         toast.success('Logged in successfully!');
         console.log("Logged in successfully");
-        Cookies.set('name', username)
+        Cookies.set('name', username);
+        Cookies.set('userID', data.userProfile.userID);
+        Cookies.set('profilePicture', data.userProfile.profilePicture);
         router.push('/home');
       } else {
         toast.error('Login failed!');
