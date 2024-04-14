@@ -11,30 +11,17 @@ export default function page() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
-
-
-  // State hooks for the username change form
-  const [newUsername, setNewUsername] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
-  // State hooks for the email change form
+  const [newUsername, setNewUsername] = useState('');
   const [currentEmail, setCurrentEmail] = useState('');
   const [emailToChange, setEmailToChange] = useState('');
   const [verificationToken, setVerificationToken] = useState('');
-
-  // State hooks for the password change form
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
-
-  // State hooks for the profile picture change form
   const [newprofileImage, setNewProfileImage] = useState(null);
   const [imageError, setImageError] = useState('');
-
-  // State hooks for getting username and profile picture of user, uses a set userID
   const [username, setUsername] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
-
-  // replace 'userId' with the actual user ID
   const userId = Cookies.get('userID');
 
   useEffect(() => {
@@ -50,13 +37,12 @@ export default function page() {
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => {
     setModalIsOpen(false);
-    setModalContent(null); // Reset the content when closing the modal
+    setModalContent(null);
     setErrorMessage('');
     setNewUsername('');
   };
 
   const handleEditProfileClick = () => {
-    // Open the modal when Edit Profile is clicked
     openModal();
   };
 
@@ -67,12 +53,12 @@ export default function page() {
       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 20px', alignItems: 'center', color: '#fff' }}>
         {isFormOpen && (
           <button onClick={() => setModalContent(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff', fontSize: '1.5rem' }}>
-            {'<'} {/* Go back symbol */}
+            {'<'}
           </button>
         )}
-        {!isFormOpen && <div />} {/* Placeholder to keep the close button aligned */}
+        {!isFormOpen && <div />}
         <button onClick={closeModal} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff', fontSize: '1.5rem' }}>
-          X {/* Close symbol */}
+          X
         </button>
       </div>
     );
@@ -99,13 +85,7 @@ export default function page() {
               setSuccessMessage('');
               setErrorMessage('');
             }}
-            style={{
-              padding: '10px',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              backgroundColor: '#f8b47c',
-              textAlign: 'center',
-            }}
+            style={buttonStyle}
           >
             Go Back
           </button>
@@ -221,6 +201,18 @@ export default function page() {
             {imageError && <div style={{ color: 'red', marginTop: '10px' }}>{imageError}</div>}
           </form>
         );
+      case 'deleteAccount':
+        return (
+          <div>
+            <p>Are you sure you want to delete your account?</p>
+            <button onClick={handleDeleteAccount} style={buttonStyle}>
+              Delete Account
+            </button>
+            <button onClick={() => setModalContent(null)} style={buttonStyle}>
+              Cancel
+            </button>
+          </div>
+        );
       default:
         return (
           <div 
@@ -243,13 +235,14 @@ export default function page() {
           <button onClick={() => setModalContent('changeProfilePicture')} style={buttonStyle}>
             Change Profile Picture
           </button>
-
+          <button onClick={() => setModalContent('deleteAccount')} style={buttonStyle}>
+            Delete Account
+          </button>
         </div>
         );
     }
   };
 
-  // Function to handle form submission for username change
   const handleUsernameChange = async (e) => {
     e.preventDefault();
     try {
@@ -266,7 +259,6 @@ export default function page() {
         throw new Error(result.error);
       }
 
-      // If the update is successful
       setSuccessMessage('Username updated successfully');
       setNewUsername('');
     } catch (error) {
@@ -274,10 +266,8 @@ export default function page() {
     }
   };
 
-  // This function is called when the user submits their old and new email
   const handleEmailChangeRequest = async (e) => {
     e.preventDefault();
-    // Call the backend to initiate the email change process
     try {
       const response = await fetch('/update-email', {
         method: 'POST',
@@ -292,17 +282,14 @@ export default function page() {
         throw new Error(data.error || 'Unknown error occurred');
       }
 
-      // Move to the next step in the process
       setModalContent('enterVerificationCode');
     } catch (error) {
       setErrorMessage(error.message);
     }
   };
 
-  // This function is called when the user submits the verification token
   const handleEmailVerification = async (e) => {
     e.preventDefault();
-    // Call the backend to verify the token and complete the email change process
     try {
       const response = await fetch('/verify', {
         method: 'POST',
@@ -317,12 +304,11 @@ export default function page() {
         throw new Error(data.error || 'Unknown error occurred');
       }
   
-      // If successful, show a success message
       setSuccessMessage('Email updated successfully');
       setCurrentEmail('');
       setEmailToChange('');
       setVerificationToken('');
-      setModalContent(null); // or some other state to show a success message
+      setModalContent(null);
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -344,7 +330,6 @@ export default function page() {
         throw new Error(result.error);
       }
 
-      // If the update is successful
       setSuccessMessage('Password updated successfully');
       setCurrentPassword('');
       setNewPassword('');
@@ -362,7 +347,7 @@ export default function page() {
     }
   
     const formData = new FormData();
-    formData.append('userId', userId); // Use actual userId from your user's state or context
+    formData.append('userId', userId);
     formData.append('profilePicture', newprofileImage);
   
     try {
@@ -382,7 +367,6 @@ export default function page() {
     }
   };
   
-  // Makes sure profile image is correct file type and isn't too large
   const handleProfileImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -395,7 +379,23 @@ export default function page() {
       }
     }
   };
-  
+
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await fetch(`/delete-account/${userId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete account');
+      }
+
+      setSuccessMessage('Your account has been deleted');
+      window.location.href = '/login';
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
 
   return (
     <main className="h-screen bg-shark-950 w-full overflow-hidden">
