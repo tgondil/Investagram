@@ -6,9 +6,10 @@ import { LuPencil } from "react-icons/lu";
 export default function PostManagementPage({ currentUser }) {
   const [posts, setPosts] = useState([
     // Initial posts data
-    { id: 1, title: "What stocks should I buy", content: "I think I want to buy 1000 units of Tesla", createdBy: "user1", likes: 0, likedBy: [], comments: [], timestamp: Date.now() },
-    { id: 2, title: "What's happening with the market", content: "I don't understand what is happening, can someone explain it?", createdBy: "user2", likes: 0, likedBy: [], comments: [], timestamp: Date.now() },
-    { id: 3, title: "Positive vibes check in", content: "How is everyone feeling today :)", createdBy: "user1", likes: 0, likedBy: [], comments: [], timestamp: Date.now() },
+    { id: 1, title: "What stocks should I buy", content: "I think I want to buy 1000 units of Tesla", createdBy: "user1", likes: 0, likedBy: [], comments: [], timestamp: Date.now(), reports: 0 },
+    { id: 2, title: "Buy my stock!", content: "Risk free! No strings attached", createdBy: "user2", likes: 0, likedBy: [], comments: [], timestamp: Date.now(), reports: 0 },
+    { id: 3, title: "What's happening with the market", content: "I don't understand what is happening, can someone explain it?", createdBy: "user2", likes: 0, likedBy: [], comments: [], timestamp: Date.now(), reports: 0 },
+    { id: 4, title: "Positive vibes check in", content: "How is everyone feeling today :)", createdBy: "user1", likes: 0, likedBy: [], comments: [], timestamp: Date.now(), reports: 0 },
   ]);
 
   const [newPost, setNewPost] = useState({ title: "", content: "" });
@@ -26,7 +27,7 @@ export default function PostManagementPage({ currentUser }) {
     // Logic to add a new post
     const id = posts.length + 1;
     const timestamp = Date.now(); // Get current timestamp
-    setPosts([{ id, ...newPost, createdBy: currentUser, likes: 0, likedBy: [], comments: [], timestamp }, ...posts]);
+    setPosts([{ id, ...newPost, createdBy: currentUser, likes: 0, likedBy: [], comments: [], timestamp, reports: 0 }, ...posts]);
     setNewPost({ title: "", content: "" }); // Clear input fields after adding
   };
 
@@ -141,10 +142,17 @@ export default function PostManagementPage({ currentUser }) {
   const handleReportPost = (id) => {
     setPosts(prevPosts => prevPosts.map(post => {
       if (post.id === id) {
-        return { ...post, flagged: true };
+        // Increment the reports count for the post
+        const updatedPost = { ...post, reports: post.reports + 1 };
+        // Check if the post has been reported 5 times
+        if (updatedPost.reports >= 5) {
+          // If reported 5 times, remove the post
+          return null;
+        }
+        return updatedPost;
       }
       return post;
-    }));
+    }).filter(Boolean)); // Remove any null entries (posts with 5 or more reports)
     alert("Post has been reported as harmful.");
   };
 
@@ -202,7 +210,7 @@ export default function PostManagementPage({ currentUser }) {
                   <div
                     key={post.id}
                     className={`${
-                      post.flagged ? "border-red-500" : "hover:bg-gray-700"
+                      post.reports >= 1 ? "border-red-500" : "hover:bg-gray-700"
                     } border rounded-3xl mb-4 w-full text-teal-300 hover:shadow-2xl hover:text-tacao-300 transition duration-300`}
                   >
                     <div className="bg-gray-800 rounded-3xl w-full p-6">
