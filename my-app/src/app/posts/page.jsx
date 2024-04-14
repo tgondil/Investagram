@@ -15,6 +15,7 @@ export default function PostManagementPage({ currentUser }) {
   const [editingPost, setEditingPost] = useState(null); // State to track the post being edited
   const [commentText, setCommentText] = useState(""); // State to track the comment text
   const [showCommentBox, setShowCommentBox] = useState(null); // State to track which post's comment box is shown
+  const [showOptions, setShowOptions] = useState(null); // State to track which post's options are shown
 
   useEffect(() => {
     // Sort posts by timestamp in descending order to display most recent posts first
@@ -137,6 +138,24 @@ export default function PostManagementPage({ currentUser }) {
     }
   };
 
+  const handleReportPost = (id) => {
+    setPosts(prevPosts => prevPosts.map(post => {
+      if (post.id === id) {
+        return { ...post, flagged: true };
+      }
+      return post;
+    }));
+    alert("Post has been reported as harmful.");
+  };
+
+  const handleReportUser = (username) => {
+    alert(`User ${username} has been reported as harmful.`);
+  };
+
+  const toggleOptions = (id) => {
+    setShowOptions(prevState => (prevState === id ? null : id));
+  };
+
   return (
     <main className="h-screen bg-shark-950 w-full overflow-hidden">
       <div className="flex">
@@ -182,7 +201,9 @@ export default function PostManagementPage({ currentUser }) {
                 {posts.map((post) => (
                   <div
                     key={post.id}
-                    className="hover:bg-gray-700 border rounded-3xl mb-4 w-full text-teal-300 hover:shadow-2xl hover:text-tacao-300 transition duration-300"
+                    className={`${
+                      post.flagged ? "border-red-500" : "hover:bg-gray-700"
+                    } border rounded-3xl mb-4 w-full text-teal-300 hover:shadow-2xl hover:text-tacao-300 transition duration-300`}
                   >
                     <div className="bg-gray-800 rounded-3xl w-full p-6">
                       <div className="flex items-center justify-between w-full mb-4 hover:text-tacao-300">
@@ -218,6 +239,34 @@ export default function PostManagementPage({ currentUser }) {
                           >
                             Comment
                           </button>
+                          {currentUser !== post.createdBy && (
+                            <>
+                              <div className="relative">
+                                <button
+                                  className="bg-gray-500 text-white px-3 py-1 rounded-lg hover:bg-gray-600 transition duration-300"
+                                  onClick={() => toggleOptions(post.id)}
+                                >
+                                  Options
+                                </button>
+                                {showOptions === post.id && (
+                                  <div className="absolute right-0 top-full mt-2 w-48 bg-gray-800 rounded-lg shadow-lg py-2">
+                                    <button
+                                      className="block w-full px-4 py-2 text-white text-left hover:bg-red-600"
+                                      onClick={() => handleReportPost(post.id)}
+                                    >
+                                      Report Post
+                                    </button>
+                                    <button
+                                      className="block w-full px-4 py-2 text-white text-left hover:bg-red-600"
+                                      onClick={() => handleReportUser(post.createdBy)}
+                                    >
+                                      Report User
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </>
+                          )}
                         </div>
                       </div>
                       <p className="text-sm">{post.content}</p>
