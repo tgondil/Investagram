@@ -2,17 +2,23 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/sidebar';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
+import Cookies from 'js-cookie'
 
 const FriendRequests = () => {
   const [incomingRequests, setIncomingRequests] = useState([
     { senderName: "Mohanna", _id: "1" },
     { senderName: "Arjav", _id: "2" },
     { senderName: "Elliot", _id: "3" },
+    { senderName: "tanay", _id: "4"},
+    { senderName: "g", _id: "5"}
   ]);
   const [sentRequests, setSentRequests] = useState([]);
   const [friendsList, setFriendsList] = useState([]);
   const [newFriendName, setNewFriendName] = useState('');
   const [receiverEmail, setReceiverEmail] = useState(''); // State to store receiver's email
+  const [friend, setFriend] = useState('');
+  const username = Cookies.get('name');
 
   const acceptFriendRequest = (requestId) => {
     const acceptedRequest = incomingRequests.find(request => request._id === requestId);
@@ -68,13 +74,37 @@ const FriendRequests = () => {
       .catch(error => console.error('Error sending friend request:', error));
   };
 
-  useEffect(() => {
+  const acceptRequest = async () => {
+    
+    try {
+      const response = await fetch("/addFriend", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, friend }),
+      });
+
+      if (response.ok) {
+        toast.success('Friend added succesfully!');
+      } else {
+        toast.error('Add failed!');
+        console.error("Failed to log in");
+      }
+    } catch (error) {
+      console.error("Error adding friend", error);
+      toast.error('Adding friend failed!');
+    }
+  };
+
+
+  /*useEffect(() => {
     // Fetch incoming friend requests
     fetch('/api/friendRequests/incoming', { method: 'GET' })
       .then(response => response.json())
       .then(data => setIncomingRequests(data.incomingRequests))
       .catch(error => console.error('Error fetching incoming friend requests:', error));
-  }, []);
+  }, []);*/
 
   return (
     <main className="flex min-h-screen bg-shark-950 text-white">
@@ -95,7 +125,9 @@ const FriendRequests = () => {
                   <div className="space-x-4">
                     <button
                       className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:bg-green-600"
-                      onClick={() => acceptFriendRequest(request._id)}
+                      onClick={() => {setFriend(request.senderName);
+                        acceptRequest()}
+                      }
                     >
                       Accept
                     </button>

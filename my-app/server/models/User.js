@@ -24,6 +24,9 @@ const userSchema = new mongoose.Schema({
       default: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' // Replace with actual URL to your default image
     }
   },
+  friends: {
+    type: [this],
+  },
   emailToChange: String, // New field to store the temporary email
   verificationToken: String // New field to store the verification token
 });
