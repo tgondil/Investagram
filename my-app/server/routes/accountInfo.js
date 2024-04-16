@@ -33,4 +33,15 @@ router.get('/userID/:id', async (req, res) => {
   }
 });
 
+router.get('/usernames', async (req, res) => {
+  try {
+    // Select only the 'username' field for each user
+    const usernames = await User.find({}).select('username -_id');
+    res.json(usernames);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;

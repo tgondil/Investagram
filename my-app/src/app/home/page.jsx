@@ -27,7 +27,7 @@ export default function page() {
             
             {/* Dropdown Menu */}
             <select
-              className="h-10 w-1/5 rounded-full text-sm text-black text-center"
+              className="h-10 w-1/6 rounded-full text-sm text-black text-center"
               value={searchType}
               onChange={(e) => setSearchType(e.target.value)}
             >
