@@ -1,60 +1,17 @@
-// import React, { useEffect, useRef } from 'react';
-// import Talk from 'talkjs';
-// import { Session } from '@talkjs/react';
-
-// function Chat() {
-//   return <Session appId="tOZXp50G" userId="sample_user_alice"></Session>;
-// }
-
-// export default Chat;
-
-// function Chat() {
-//     const containerRef = useRef(null);
-
-//     useEffect(() => {
-//         Talk.ready.then(() => {
-//             const me = new Talk.User({
-//                 id: "123456",
-//                 name: "Alice",
-//                 email: "alice@example.com",
-//                 photoUrl: "https://talkjs.com/images/avatar-1.jpg",
-//                 welcomeMessage: "Hey there! How can I help?"
-//             });
-
-//             if (!window.talkSession) {
-//                 window.talkSession = new Talk.Session({
-//                     appId: "tOZXp50G",
-//                     me: me
-//                 });
-//             }
-
-//             const conversation = window.talkSession.getOrCreateConversation(Talk.oneOnOneId(me, me));
-//             conversation.setParticipant(me);
-
-//             const chat = window.talkSession.createChatbox(conversation);
-//             chat.mount(containerRef.current);
-//         });
-//     }, []);
-
-//     return <div ref={containerRef} style={{ height: '500px' }} />;
-// }
-
-// export default Chat;
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Talk from 'talkjs';
 
 const Chat = ({ user, otherUser }) => {
-  const talkjsContainer = React.createRef();
+  const talkjsContainer = useRef(null);
 
   useEffect(() => {
-    const currentUser = user;
+    if (!user) return;
 
     Talk.ready.then(() => {
-      let me = new Talk.User({
-        id: currentUser.id,
-        name: currentUser.username,
-        photoUrl: currentUser.profilePicture,
+      const me = new Talk.User({
+        id: user.id,
+        name: user.username,
+        photoUrl: user.photoUrl,
         welcomeMessage: "Hey there! How are you?"
       });
 
@@ -63,30 +20,28 @@ const Chat = ({ user, otherUser }) => {
         me: me
       });
 
+      let conversation;
       if (otherUser) {
-        let other = new Talk.User({
-          id: otherUser.id,
-          name: otherUser.username,
-          photoUrl: otherUser.profilePicture
+        const other = new Talk.User({
+          id: otherUser?.id,
+          name: otherUser?.username,
+          photoUrl: otherUser?.profilePicture
         });
 
-        const conversation = session.getOrCreateConversation(Talk.oneOnOneId(me, other))
-        conversation.setParticipant(me);
+        conversation = session.getOrCreateConversation(Talk.oneOnOneId(me, other));
         conversation.setParticipant(other);
-
-        const inbox = session.createInbox({selected: conversation});
-        inbox.mount(talkjsContainer.current);
       } else {
-        const inbox = session.createInbox();
-        inbox.mount(talkjsContainer.current);
+        conversation = session.getOrCreateConversation(Talk.oneOnOneId(me,me));
       }
-    })
-  }, [])
+      
+      conversation.setParticipant(me);
 
-  console.log(talkjsContainer.current)
-  return (
-    <div ref={talkjsContainer} className='chatbox-container' style={{ height: '500px' }}></div>
-  )
+      const inbox = session.createInbox({ selected: conversation });
+      inbox.mount(talkjsContainer.current);
+    }).catch(error => console.error('Error initializing TalkJS', error));
+  }, [user, otherUser]); // Ensure re-initialization if users change
+
+  return <div ref={talkjsContainer} className='chatbox-container' style={{ height: '100%' }}></div>;
 }
 
 export default Chat;
