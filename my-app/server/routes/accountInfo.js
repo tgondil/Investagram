@@ -33,11 +33,11 @@ router.get('/userID/:id', async (req, res) => {
   }
 });
 
-router.get('/usernames', async (req, res) => {
+router.get('/users', async (req, res) => {
   try {
-    // Select only the 'username' field for each user
-    const usernames = await User.find({}).select('username -_id');
-    res.json(usernames);
+    // Select only the 'username' and '_id' fields for each user
+    const users = await User.find({}).select('username _id');
+    res.json(users);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

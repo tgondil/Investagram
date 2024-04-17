@@ -3,7 +3,7 @@ import Cookies from 'js-cookie'
 import React, { useState } from 'react';
 import Link from "next/link";
 import toast, { Toaster } from 'react-hot-toast';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
   const [username, setUsername] = useState("");
