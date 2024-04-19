@@ -27,6 +27,7 @@ export default function Login() {
         console.log("Logged in successfully");
         Cookies.set('name', username);
         Cookies.set('userID', data.userProfile.userID);
+        Cookies.set('email', data.userProfile.email);
         Cookies.set('profilePicture', data.userProfile.profilePicture);
         router.push('/home');
       } else {

@@ -7,7 +7,7 @@ const User = require('../models/User');
 router.get('/userID/:id', async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await User.findById(userId).select('username profilePicture');
+    const user = await User.findById(userId).select('username email profilePicture');
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -16,6 +16,7 @@ router.get('/userID/:id', async (req, res) => {
     // If you store the profile picture as a URL or path in the User model:
     const userProfile = {
       username: user.username,
+      email: user.email,
       profilePicture: user.profilePicture.defaultUrl // This should be a URL or path to the image
     };
 

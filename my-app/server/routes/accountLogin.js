@@ -16,6 +16,7 @@ router.post('/accountLogin', async (req, res) => {
       if (passwordMatch) {
         let userProfile = {
           userID: existingUser._id,
+          email: existingUser.email,
           profilePicture: existingUser.profilePicture.defaultUrl
         };
 

@@ -5,36 +5,41 @@ import Chat from '../../components/chat'
 import Cookies from 'js-cookie'
 
 function page() {
-
-  const [username, setUsername] = useState('');
-  const [profilePicture, setProfilePicture] = useState('');
-  const userId = Cookies.get('userID');
+  const [selectedUsername, setSelectedUsername] = useState('Frank');
+  const [selectedEmail, setSelectedEmail] = useState('');
+  const [selectedProfilePicture, setSelectedProfilePicture] = useState('https://talkjs.com/new-web/avatar-8.jpg');
+  const selectedUserID = Cookies.get('selectedUserID') || 'frank';
 
   useEffect(() => {
-    fetch(`/userID/${userId}`)
-      .then(response => response.json())
-      .then(data => {
-        setUsername(data.username);
-        setProfilePicture(data.profilePicture);
-      })
-      .catch(error => console.error('Error fetching user data:', error));
+    if (selectedUserID != 'frank') {
+      fetch(`/userID/${selectedUserID}`)
+        .then(response => response.json())
+        .then(data => {
+          setSelectedUsername(data.username);
+          setSelectedProfilePicture(data.profilePicture);
+        })
+        .catch(error => console.error('Error fetching user data:', error));
+    }
   }, []);
 
   const currentUser = {
-    id: Cookies.get("userID"),
-    username: Cookies.get("name"),
-    photoUrl: Cookies.get("profilePicture"),
+    id: Cookies.get('userID'),
+    username: Cookies.get('name'),
+    email: Cookies.get('email'),
+    photoUrl: Cookies.get('profilePicture'),
     welcomeMessage: 'Hi there, how can I help?',
     role: 'default'
   };
 
   const otherUser = {
-    id: 'frank',
-    username: 'Frank',
-    photoUrl: 'https://talkjs.com/new-web/avatar-8.jpg',
+    id: Cookies.get("selectedUserID") || 'frank',
+    username: Cookies.get("selectedUsername") || 'Frank',
+    email: Cookies.get("selectedEmail") || null,
+    photoUrl: Cookies.get("selectedProfilePicture") || 'https://talkjs.com/new-web/avatar-8.jpg',
     welcomeMessage: 'Hey! What can I do for you today?',
     role: 'default'
   };
+  console.log(otherUser.email)
 
   return (
     <main className="h-screen bg-shark-950 w-full overflow-hidden">

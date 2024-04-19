@@ -11,8 +11,8 @@ const Chat = ({ user, otherUser }) => {
       const me = new Talk.User({
         id: user.id,
         name: user.username,
+        email: user.email,
         photoUrl: user.photoUrl,
-        welcomeMessage: "Hey there! How are you?"
       });
 
       const session = new Talk.Session({
@@ -25,6 +25,7 @@ const Chat = ({ user, otherUser }) => {
         const other = new Talk.User({
           id: otherUser?.id,
           name: otherUser?.username,
+          email: otherUser?.email,
           photoUrl: otherUser?.profilePicture
         });
 

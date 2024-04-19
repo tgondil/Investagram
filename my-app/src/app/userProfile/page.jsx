@@ -3,23 +3,33 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from "../../components/sidebar";
 import Feed from "../../components/feed";
 import Cookies from 'js-cookie'
+import { useRouter } from 'next/navigation';
 
 export default function FriendProfilePage() {
   const [friendTier, setFriendTier] = useState(1); // State for friend tier level
 
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
   const selectedUserID = Cookies.get("selectedUserID");
+
+  const router = useRouter();
 
   useEffect(() => {
     fetch(`/userID/${selectedUserID}`)
       .then(response => response.json())
       .then(data => {
         setUsername(data.username);
+        setEmail(data.email);
         setProfilePicture(data.profilePicture);
       })
       .catch(error => console.error('Error fetching user data:', error));
-  }, []);
+  }, [selectedUserID]);
+
+  useEffect(() => {
+    Cookies.set("selectedEmail", email);
+    Cookies.set("selectedProfilePicture", profilePicture);
+  }, [email, profilePicture]);
   
   // Function to handle changing friend's tier level
   const handleTierChange = (increment) => {
@@ -27,6 +37,10 @@ export default function FriendProfilePage() {
     if (newTier >= 1 && newTier <= 3) {
       setFriendTier(newTier);
     }
+  };
+
+  const handleMessageButtonClick = () => {
+    router.push('/inbox'); // Redirect to the inbox page
   };
 
   return (
@@ -48,6 +62,7 @@ export default function FriendProfilePage() {
                     {username}
                   </h1>
                   <button
+                    onClick={handleMessageButtonClick}
                     className="text-m mt-6 font-semibold bg-tacao-300 w-full flex justify-center items-center text-white rounded-lg px-6 py-2 block shadow-xl hover:animate-text group hover:font-bold hover:bg-gradient-to-r  hover:from-teal-500 hover:via-tacao-300 hover:to-teal-500 hover:bg-clip-text hover:text-transparent">
                     Send Message
                   </button>

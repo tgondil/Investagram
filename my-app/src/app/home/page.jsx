@@ -70,6 +70,7 @@ export default function CombinedPage({ currentUser }) {
 
     if (user) {
       Cookies.set('selectedUserID', user._id);
+      Cookies.set('selectedUsername', user.username);
       router.push('/userProfile');
     } else {
       // Show error message using toast
