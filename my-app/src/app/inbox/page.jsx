@@ -1,7 +1,4 @@
 "use client";
-import { useCallback } from 'react';
-import Talk from 'talkjs';
-import { Session, Chatbox } from '@talkjs/react';
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/sidebar'
 import Chat from '../../components/chat'

@@ -16,7 +16,7 @@ router.get('/userID/:id', async (req, res) => {
     // If you store the profile picture as a URL or path in the User model:
     const userProfile = {
       username: user.username,
-      profilePicture: user.profilePicture // This should be a URL or path to the image
+      profilePicture: user.profilePicture.defaultUrl // This should be a URL or path to the image
     };
 
     // If you store the profile picture as binary data in the User model:

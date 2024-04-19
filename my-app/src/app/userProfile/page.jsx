@@ -1,10 +1,25 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from "../../components/sidebar";
 import Feed from "../../components/feed";
+import Cookies from 'js-cookie'
 
 export default function FriendProfilePage() {
   const [friendTier, setFriendTier] = useState(1); // State for friend tier level
+
+  const [username, setUsername] = useState('');
+  const [profilePicture, setProfilePicture] = useState('');
+  const selectedUserID = Cookies.get("selectedUserID");
+
+  useEffect(() => {
+    fetch(`/userID/${selectedUserID}`)
+      .then(response => response.json())
+      .then(data => {
+        setUsername(data.username);
+        setProfilePicture(data.profilePicture);
+      })
+      .catch(error => console.error('Error fetching user data:', error));
+  }, []);
   
   // Function to handle changing friend's tier level
   const handleTierChange = (increment) => {
@@ -26,15 +41,20 @@ export default function FriendProfilePage() {
             <div className="mt-4 w-4/5 h-full flex flex-col justify-center items-center">
               <div className="w-full flex justify-center items-center gap-10 h-2/5">
                 <div className="w-40 h-40 rounded-full">
-                  <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="placeholder" className="object-contain rounded-full" />
+                  <img src={profilePicture} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} className="object-contain rounded-full" />
                 </div>
                 <div>
                   <h1 className="text-3xl flex justify-center items-center font-poppins font-normal animate-text bg-gradient-to-r from-teal-500 via-tacao-300 to-teal-500 bg-clip-text text-transparent">
-                    Elliot.Smith25
+                    {username}
                   </h1>
-                  <div className="mt-1 text-tacao-300 text-m px-2 py-1 rounded text-sm">
+                  <button
+                    className="text-m mt-6 font-semibold bg-tacao-300 w-full flex justify-center items-center text-white rounded-lg px-6 py-2 block shadow-xl hover:animate-text group hover:font-bold hover:bg-gradient-to-r  hover:from-teal-500 hover:via-tacao-300 hover:to-teal-500 hover:bg-clip-text hover:text-transparent">
+                    Send Message
+                  </button>
+                  <button
+                    className="text-m mt-6 font-semibold bg-tacao-300 w-full flex justify-center items-center text-white rounded-lg px-6 py-2 block shadow-xl hover:animate-text group hover:font-bold hover:bg-gradient-to-r  hover:from-teal-500 hover:via-tacao-300 hover:to-teal-500 hover:bg-clip-text hover:text-transparent">
                     Added as Friend
-                  </div>
+                  </button>
                   <div className="flex justify-center items-center gap-4">
                     <h1 className="text-tacao-300 text-m font-normal mt-6 flex justify-center items-center">
                       <span className="font-bold mr-1">5</span> Friends
@@ -47,12 +67,6 @@ export default function FriendProfilePage() {
               </div>
               <div className="h-1/5 w-full flex justify-center items-center border-b border-dotted">
                 <div className="w-1/3">
-                  <h1 className="text-tacao-300 text-m font-bold"> 
-                    Elliot Smith
-                  </h1>
-                  <h1 className="text-tacao-300 mt-2">
-                    Purdue 2025 || West Lala
-                  </h1>
                   {/* Display friend's tier level */}
                   <div className="flex justify-center items-center mt-2">
                     <h1 className="text-tacao-300 text-m font-normal mr-2">
@@ -77,7 +91,6 @@ export default function FriendProfilePage() {
                       </button>
                     </div>
                   </div>
-                  {/* Label indicating friend is already added */}
                   <div className="mt-4">
                   </div>
                 </div>
