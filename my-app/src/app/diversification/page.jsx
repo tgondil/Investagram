@@ -30,7 +30,7 @@ const StockRecommendationsPage = () => {
     }
   };
 
-  return (
+  return (                                                             //change heading color later
     <main className="h-screen bg-shark-950 w-full overflow-hidden">
       <div className="flex">
         <Sidebar className="w-1/5 bg-shark-950" />
