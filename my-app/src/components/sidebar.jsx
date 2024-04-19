@@ -26,9 +26,6 @@ export default function Sidebar() {
             <IoHomeOutline className="mx-2.5" /> Home
           </h1>
         </Link>
-        <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
-          <IoIosSearch className="mx-2.5" /> Explore
-        </h1>
         <Link href={"./inbox"}>
           <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
             <IoMailOutline className="mx-2.5 mt-0.5" /> Inbox
@@ -44,9 +41,6 @@ export default function Sidebar() {
             <IoBookmarksOutline className="mx-2.5" /> Search Stocks
           </h1>
         </Link>
-        <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
-          <IoMdNotificationsOutline className="mx-2.5" /> Notifications
-        </h1>
         <Link href={"./friendRequests"}>
           <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
             <HiOutlineUsers className="mx-2.5 mt-0.5" /> Friends
