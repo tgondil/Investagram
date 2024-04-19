@@ -28,7 +28,7 @@ function page() {
     email: Cookies.get('email'),
     photoUrl: Cookies.get('profilePicture'),
     welcomeMessage: 'Hi there, how can I help?',
-    role: 'default'
+    role: 'user'
   };
 
   const otherUser = {
@@ -37,9 +37,8 @@ function page() {
     email: Cookies.get("selectedEmail") || null,
     photoUrl: Cookies.get("selectedProfilePicture") || 'https://talkjs.com/new-web/avatar-8.jpg',
     welcomeMessage: 'Hey! What can I do for you today?',
-    role: 'default'
+    role: 'user'
   };
-  console.log(otherUser.email)
 
   return (
     <main className="h-screen bg-shark-950 w-full overflow-hidden">
