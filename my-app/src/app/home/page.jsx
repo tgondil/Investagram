@@ -5,11 +5,11 @@ import { LuPencil } from "react-icons/lu";
 import { IoHomeOutline } from "react-icons/io5";
 import toast, { Toaster } from 'react-hot-toast';
 import Feed from "../../components/feed";
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 
 export default function CombinedPage({ currentUser }) {
-  const [searchType, setSearchType] = useState("posts"); // Default search type
+  const [searchType, setSearchType] = useState("users"); // Default search type
   const [searchQuery, setSearchQuery] = useState(""); // Search query
   const [usersList, setUsersList] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
@@ -227,6 +227,7 @@ export default function CombinedPage({ currentUser }) {
 
   return (
     <main className="h-screen bg-shark-950 w-full overflow-hidden">
+      <Toaster />
       <div className="flex">
         <Sidebar className="w-1/5"></Sidebar>
         <div className="w-4/5 relative">
