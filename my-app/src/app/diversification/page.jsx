@@ -1,4 +1,4 @@
-// src/app/stockRecommendations/page.jsx
+//frontend for diversification insights
 "use client";
 
 import React, { useState, useEffect } from "react";
