@@ -97,12 +97,15 @@ export default function CombinedPage({ currentUser }) {
     if (currentUser === post.createdBy) {
       // Set the post to be edited in the state
       setEditingPost(post);
-      setNewPost({ title: post.title, content: post.content }); // Initialize input fields with existing post details
+      // Populate the new post state with the details of the post being edited
+      setNewPost({ title: post.title, content: post.content });
+      // Automatically switch to the create post UI
+      setCreatingPost(true);
     } else {
       alert("You can only edit your own posts.");
     }
   };
-
+  
   const handleSaveEdit = () => {
     // Logic to save the edited post
     setPosts((prevPosts) =>
@@ -110,6 +113,10 @@ export default function CombinedPage({ currentUser }) {
         prevPost.id === editingPost.id ? { ...prevPost, ...newPost } : prevPost
       )
     );
+    
+    // Delete the original post
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== editingPost.id));
+  
     setEditingPost(null); // Clear editing state
     setNewPost({ title: "", content: "" }); // Clear input fields after editing
   };
