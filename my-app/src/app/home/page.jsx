@@ -232,6 +232,36 @@ export default function CombinedPage({ currentUser }) {
     setShowOptions(prevState => (prevState === id ? null : id));
   };
 
+  function HandleShare () {
+    var url = window.location.href;
+    var textarea = document.createElement("textarea");
+    textarea.value = url;
+    textarea.style.position = "fixed"; // Make it hidden and off-screen
+    textarea.style.left = "-9999px";
+    textarea.style.top = "-9999px";
+
+    // Append the <textarea> to the document
+    document.body.appendChild(textarea);
+
+    // Select the content of the <textarea>
+    textarea.select();
+
+    try {
+        // Use the Clipboard API to copy the selected text
+        navigator.clipboard.writeText(url).then(function() {
+          toast.success('Post link copied to clipboard.');
+        }, function(err) {
+
+            toast.error("Failed to copy URL to clipboard");
+        });
+    } catch (err) {
+      toast.error("Failed to copy URL to clipboard");
+    }
+
+    document.body.removeChild(textarea);
+    
+  }
+
 
   return (
     <main className="h-screen bg-shark-950 w-full overflow-hidden">
@@ -388,6 +418,12 @@ export default function CombinedPage({ currentUser }) {
                                         onClick={() => handleReportUser(post.createdBy)}
                                       >
                                         Report User
+                                      </button>
+                                      <button
+                                        className="block w-full px-4 py-2 text-white text-left hover:bg-red-600"
+                                        onClick={() => handleShare()}
+                                      >
+                                        Share Post
                                       </button>
                                     </div>
                                   )}
