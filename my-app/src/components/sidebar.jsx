@@ -1,3 +1,4 @@
+
 import React from "react";
 import { IoHomeOutline } from "react-icons/io5";
 import { IoIosSearch } from "react-icons/io";
@@ -8,6 +9,9 @@ import { IoPersonOutline } from "react-icons/io5";
 import { HiOutlineUsers } from "react-icons/hi2";
 import { IoKeyOutline } from "react-icons/io5";
 import Link from "next/link";
+
+
+
 
 export default function Sidebar() {
   return (
@@ -21,37 +25,42 @@ export default function Sidebar() {
             Investing just got smarter.
           </h1>
         </div>
-        <Link href={"./home"}>
+        <Link href="/home">
           <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
             <IoHomeOutline className="mx-2.5" /> Home
           </h1>
         </Link>
-        <Link href={"./inbox"}>
+        <Link href="/diversification">
+          <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
+            <IoIosSearch className="mx-2.5" /> Explore
+          </h1>
+        </Link>
+        <Link href="/inbox">
           <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
             <IoMailOutline className="mx-2.5 mt-0.5" /> Inbox
           </h1>
         </Link>
-        <Link href={"./watchlist"}>
+        <Link href="/watchlist">
           <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
             <IoBookmarksOutline className="mx-2.5" /> Watchlist
           </h1>
         </Link>
-        <Link href={"./stockSearch"}>
+        <Link href="/stockSearch">
           <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
             <IoBookmarksOutline className="mx-2.5" /> Search Stocks
           </h1>
         </Link>
-        <Link href={"./friendRequests"}>
+        <Link href="/friendRequests">
           <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
             <HiOutlineUsers className="mx-2.5 mt-0.5" /> Friends
           </h1>
         </Link>
-        <Link href={"./profile"}>
+        <Link href="/profile">
           <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
             <IoPersonOutline className="mx-2.5 " /> Me
           </h1>
         </Link>
-        <Link href={"./usernamePasswordReset"}>
+        <Link href="/usernamePasswordReset">
           <h1 className="flex flex-row font-poppins font-light rounded-xl py-3.5 text-2xl text-tacao-300 hover:animate-pop hover:bg-shark-800">
             <IoKeyOutline className="mx-2.5" /> Reset
           </h1>
