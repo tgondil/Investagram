@@ -92,7 +92,7 @@ const WatchlistPage = () => {
               <input
                 type="text"
                 placeholder="Search stock (e.g., AAPL)"
-                className="text-m w-3/4 font-semibold py-2 px-4 rounded-lg shadow-xl focus:outline-none"
+                className="text-m w-3/4 font-semibold py-2 px-4 rounded-lg shadow-xl focus:outline-none text-black"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && addToWatchlist(searchTerm)}
@@ -104,7 +104,7 @@ const WatchlistPage = () => {
                 Add
               </button>
               {suggestions.length > 0 && (
-                <ul className="absolute top-full mt-1 w-3/4 bg-white shadow-xl rounded-lg z-10">
+                <ul className="absolute top-full mt-1 w-3/4 bg-white shadow-xl rounded-lg z-10 text-black">
                   {suggestions.map((item, index) => (
                     <li
                       key={index}
@@ -119,7 +119,7 @@ const WatchlistPage = () => {
             </div>
             <ul className="mt-6 space-y-4">
               {watchlist.map((stock, index) => (
-                <li key={index} className="flex justify-between items-center bg-white p-4 rounded-lg shadow">
+                <li key={index} className="flex justify-between items-center bg-white p-4 rounded-lg shadow text-black">
                   <div>
                     <span className="font-semibold text-lg">{stock.symbol}</span> - {stock.name || 'N/A'}
                     <div>Price: ${stock.price || 'Fetching...'}</div>

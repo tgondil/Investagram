@@ -72,7 +72,7 @@ const StockSearchPage = () => {
               <input
                 type="text"
                 placeholder="AAPL or Apple"
-                className="text-m w-3/4 font-semibold py-2 px-4 rounded-lg shadow-xl focus:outline-none"
+                className="text-m w-3/4 font-semibold py-2 px-4 rounded-lg shadow-xl focus:outline-none text-black"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={handleEnter}
@@ -98,7 +98,7 @@ const StockSearchPage = () => {
               )}
             </div>
             {stockData && (
-              <div className="mt-6 p-4 bg-white rounded-lg shadow overflow-y-auto max-h-96">
+              <div className="mt-6 p-4 bg-white rounded-lg shadow overflow-y-auto max-h-96 text-black">
                 <h3 className="text-lg font-semibold mb-4">Stock Details:</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   {Object.entries(stockData).map(([key, value]) => (
