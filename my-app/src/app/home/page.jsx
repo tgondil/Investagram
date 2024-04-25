@@ -15,10 +15,54 @@ export default function CombinedPage({ currentUser }) {
   const [suggestions, setSuggestions] = useState([]);
   const [posts, setPosts] = useState([
     // Initial posts data
-    { id: 1, title: "What stocks should I buy", content: "I think I want to buy 1000 units of Tesla", createdBy: "user1", likes: 0, likedBy: [], comments: [], timestamp: Date.now(), reports: 0 },
+    { id: 1, title: "What stocks should I buy", content: "I think I want to buy 1000 units of Tesla, but I am not sure. Does anyone have any thoughts?", createdBy: "user1", likes: 3, likedBy: [], comments: [], timestamp: Date.now(), reports: 0 },
     { id: 2, title: "Buy my stock!", content: "Risk free! No strings attached", createdBy: "user2", likes: 0, likedBy: [], comments: [], timestamp: Date.now(), reports: 0 },
-    { id: 3, title: "What's happening with the market", content: "I don't understand what is happening, can someone explain it?", createdBy: "user2", likes: 0, likedBy: [], comments: [], timestamp: Date.now(), reports: 0 },
-    { id: 4, title: "Positive vibes check in", content: "How is everyone feeling today :)", createdBy: "user1", likes: 0, likedBy: [], comments: [], timestamp: Date.now(), reports: 0 },
+    { id: 3, title: "What's happening with the market", content: "I don't understand what is happening, can someone explain it?", createdBy: "user2", likes: 17, likedBy: [], comments: [], timestamp: Date.now(), reports: 0 },
+    { id: 4, title: "Positive vibes check in", content: "How is everyone feeling today :)", createdBy: "user3", likes: 6, likedBy: [], comments: [], timestamp: Date.now(), reports: 0 },
+    {
+      id: 5,
+      title: "Investment Advice Needed",
+      content: "I'm considering diversifying my investment portfolio. Any suggestions on promising sectors or companies?",
+      createdBy: "user4",
+      likes: 10,
+      likedBy: [],
+      comments: [],
+      timestamp: Date.now(),
+      reports: 0
+    },
+    {
+      id: 6,
+      title: "Stock Market Volatility",
+      content: "The recent market fluctuations have left me uncertain about my investment strategy. How are you navigating through this volatility?",
+      createdBy: "user5",
+      likes: 2,
+      likedBy: [],
+      comments: [],
+      timestamp: Date.now(),
+      reports: 0
+    },
+    {
+      id: 7,
+      title: "Crypto Investments",
+      content: "Thinking about getting into cryptocurrency. Any advice for a beginner?",
+      createdBy: "user6",
+      likes: 8,
+      likedBy: [],
+      comments: [],
+      timestamp: Date.now(),
+      reports: 0
+    },
+    {
+      id: 8,
+      title: "Market Analysis Discussion",
+      content: "Let's analyze recent market trends and share insights. What do you think is driving the current market conditions?",
+      createdBy: "user7",
+      likes: 4,
+      likedBy: [],
+      comments: [],
+      timestamp: Date.now(),
+      reports: 0
+    }
   ]);
   const [newPost, setNewPost] = useState({ title: "", content: "" });
   const [editingPost, setEditingPost] = useState(null); // State to track the post being edited
